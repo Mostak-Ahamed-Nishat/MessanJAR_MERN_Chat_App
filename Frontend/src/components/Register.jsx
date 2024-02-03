@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import isImageByContentType from "../utils/isImage";
-import { axios } from "axios";
+// import isImageByContentType from "../utils/isImage";
 import { useDispatch } from "react-redux";
-import { userRegister } from "../redux/actions/authAction";
+import { userRegister } from "../redux/actions/auth/authAction";
 
 export default function Register() {
   const dispatch = useDispatch();
 
   const [state, setState] = useState({
-    userName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    userName: "Nishat",
+    email: "nishat@gmail.com",
+    password: "12345678",
+    confirmPassword: "12345678",
     image: "",
   });
 
+  //For showing the image live
   const [loadImage, setLoadImage] = useState("");
 
   //Input Handler
@@ -28,10 +28,7 @@ export default function Register() {
 
   //User Image Handler
   const fileHandler = (e) => {
-    if (
-      e.target.files.length !== 0 &&
-      isImageByContentType(e.target.files[0])
-    ) {
+    if (e.target.files.length !== 0) {
       setState({
         ...state,
         [e.target.name]: e.target.files[0],
@@ -39,9 +36,11 @@ export default function Register() {
     }
 
     const reader = new FileReader();
+    
     reader.onload = () => {
       setLoadImage(reader.result);
     };
+  
     reader.readAsDataURL(e.target.files[0]);
   };
 
@@ -56,8 +55,8 @@ export default function Register() {
     formData.append("confirmPassword", state.confirmPassword);
     formData.append("image", state.image);
 
+    //Dispatch the axios request to sent the form data into server
     dispatch(userRegister(formData));
-
   };
 
   return (
@@ -72,7 +71,7 @@ export default function Register() {
         {/* Register Body */}
         <div className="card-body">
           {/* Card Input Form */}
-          <form action="" onSubmit={(e) => submitHandler(e)}>
+          <form onSubmit={submitHandler}>
             {/* User name */}
             <div className="form-group">
               <label htmlFor="username">User Name</label>
@@ -130,9 +129,7 @@ export default function Register() {
                 className="form-control"
                 placeholder="Enter your confirm password"
                 id="confirmPassword"
-                onChange={(e) => {
-                  inputHandler(e);
-                }}
+                onChange={inputHandler}
                 value={state.confirmPassword}
               />
             </div>
@@ -146,7 +143,7 @@ export default function Register() {
                 <div className="file">
                   <label htmlFor="image">Select Image</label>
                   <input
-                    onChange={(e) => fileHandler(e)}
+                    onChange={fileHandler}
                     type="file"
                     name="image"
                     className="form-control"
@@ -157,7 +154,7 @@ export default function Register() {
             </div>
 
             <div className="form-group">
-              <input type="submit" value="register" className="btn" />
+              <button className="btn">Sign up</button>
             </div>
 
             <div className="form-group">
