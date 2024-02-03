@@ -7,6 +7,13 @@ const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser');
 
+
+if (!process.env.jsonPrivateKey) {
+    console.error('JWT private key not available')
+    process.exit(1)
+}
+
+
 // Use cors for cross connection
 app.use(cors())
 

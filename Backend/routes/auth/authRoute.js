@@ -1,12 +1,12 @@
 const router = require('express').Router()
 
 const {
-    userRegister
-} = require('../../controller/auth/authController')
+    userRegistrationController
+} = require('../../controller/auth/userRegistrationController')
 
 //Multer
 const upload = require('../../middleware/multerConfig')
 
-router.post('/user-register', userRegister)
+router.post('/user-register', userRegistrationController)
 
 module.exports = router

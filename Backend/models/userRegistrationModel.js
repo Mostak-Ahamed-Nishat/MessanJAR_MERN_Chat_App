@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -24,7 +26,21 @@ const userSchema = new Schema({
         required: true,
         minlength: 8,
     },
-    image:String
+    image: String,
+}, {
+    timestamps: true
 })
+
+//Generate JWT token 
+userSchema.methods.generateJWTAuthToken = function () {
+    let token = jwt.sign({
+        _id: this._id,
+        email: this.email
+    }, process.env.jsonPrivateKey, {
+        expiresIn: process.env.EXPIRE_TIME
+    })
+    
+    return token
+}
 
 module.exports = mongoose.model('user', userSchema)

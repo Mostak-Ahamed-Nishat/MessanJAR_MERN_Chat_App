@@ -36,11 +36,11 @@ export default function Register() {
     }
 
     const reader = new FileReader();
-    
+
     reader.onload = () => {
       setLoadImage(reader.result);
     };
-  
+
     reader.readAsDataURL(e.target.files[0]);
   };
 
@@ -54,7 +54,6 @@ export default function Register() {
     formData.append("password", state.password);
     formData.append("confirmPassword", state.confirmPassword);
     formData.append("image", state.image);
-
     //Dispatch the axios request to sent the form data into server
     dispatch(userRegister(formData));
   };
