@@ -6,6 +6,7 @@ const DB_CONNECTION = require('./config/database')
 const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 
 if (!process.env.jsonPrivateKey) {
@@ -29,6 +30,8 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+app.use(cookieParser());
 
 
 //Routers

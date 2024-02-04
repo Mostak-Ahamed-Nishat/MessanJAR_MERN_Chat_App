@@ -1,0 +1,2 @@
+export const FAIL = 'REGISTRATIO_FIAL'
+export const SUCCESS = 'REGISTRATIO_SUCCESS'

@@ -119,16 +119,20 @@ const userRegistrationController = async (req, res) => {
                     let token = data.generateJWTAuthToken()
 
                     if (token) {
+
                         const expirationDate = new Date();
                         expirationDate.setTime(expirationDate.getTime() + 10 * 24 * 60 * 60 * 1000); // 10 days from now
 
                         const options = {
                             expires: expirationDate,
+                            httpOnly: true,
                         };
 
                         res.status(200).cookie('authToken', token, options).header('X-Auth-Token', token).json({
-                            message: "User created successfully"
+                            message: "User created successfully",
+                            token
                         })
+
                     } else {
                         throw ({
                             error: "Server error with token."
@@ -142,7 +146,6 @@ const userRegistrationController = async (req, res) => {
                 })
             })
         } catch (error) {
-
             if (error.image) {
                 fs.unlink(error.image, (err) => {
                     if (err) return res.status(500).json({
@@ -154,7 +157,6 @@ const userRegistrationController = async (req, res) => {
                 message: error.error
             })
         }
-
     })
 }
 

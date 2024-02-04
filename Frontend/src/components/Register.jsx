@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 // import isImageByContentType from "../utils/isImage";
 import { useDispatch } from "react-redux";
-import { userRegister } from "../redux/actions/auth/authAction";
+import { userRegister } from "../redux/actions/auth/registrationAction";
 
 export default function Register() {
   const dispatch = useDispatch();
