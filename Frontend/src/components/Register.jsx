@@ -1,11 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import isImageByContentType from "../utils/isImage";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userRegister } from "../redux/actions/auth/registrationAction";
+import { useAlert } from "react-alert";
 
 export default function Register() {
+  //Get the data from Redux after form submission
   const dispatch = useDispatch();
+  const {
+    loading,
+    isError,
+    isSuccess,
+    isAuthenticated,
+    success,
+    errors,
+    message,
+    data,
+  } = useSelector((state) => state.registration);
+
+  //Call the React alert hock
+  const alert = useAlert();
 
   const [state, setState] = useState({
     userName: "Nishat",
@@ -17,6 +32,9 @@ export default function Register() {
 
   //For showing the image live
   const [loadImage, setLoadImage] = useState("");
+
+  //Error state
+  const [formErrors, setFormErrors] = useState({});
 
   //Input Handler
   const inputHandler = (e) => {
@@ -36,16 +54,13 @@ export default function Register() {
     }
 
     const reader = new FileReader();
-
     reader.onload = () => {
       setLoadImage(reader.result);
     };
-
     reader.readAsDataURL(e.target.files[0]);
   };
 
   //OnSubmit Handler
-
   const submitHandler = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -57,6 +72,26 @@ export default function Register() {
     //Dispatch the axios request to sent the form data into server
     dispatch(userRegister(formData));
   };
+
+  //
+  useEffect(() => {
+    if (isSuccess && isError) {
+      alert.success(success);
+    }
+
+    if (isError) {
+
+      let errorList = {};
+
+      errors.forEach((item) => {
+        const key = Object.keys(item); // Assuming each payload item has only one key
+        const value = item[key];
+        errorList[key] = value;
+      });
+
+      setFormErrors(errorList);
+    }
+  }, [alert, errors, isError, isSuccess, success]);
 
   return (
     <div className="register">
@@ -73,7 +108,8 @@ export default function Register() {
           <form onSubmit={submitHandler}>
             {/* User name */}
             <div className="form-group">
-              <label htmlFor="username">User Name</label>
+              <label htmlFor="username">Name</label>
+
               <input
                 type="text"
                 name="userName"
@@ -85,6 +121,10 @@ export default function Register() {
                 }}
                 value={state.userName}
               />
+
+              {formErrors.userName && (
+                <span className="error" style={{ color: 'red' }}>{formErrors.userName}</span>
+              )}
             </div>
 
             {/* Email */}
@@ -101,6 +141,9 @@ export default function Register() {
                 }}
                 value={state.email}
               />
+               {formErrors.email && (
+                <span className="error" style={{ color: 'red' }}>{formErrors.email}</span>
+              )}
             </div>
 
             {/* Password */}
@@ -117,6 +160,9 @@ export default function Register() {
                 }}
                 value={state.password}
               />
+               {formErrors.password && (
+                <span className="error" style={{ color: 'red' }}>{formErrors.password}</span>
+              )}
             </div>
 
             {/*Confirm Password */}
@@ -131,6 +177,9 @@ export default function Register() {
                 onChange={inputHandler}
                 value={state.confirmPassword}
               />
+               {formErrors.confirmPassword && (
+                <span className="error" style={{ color: 'red' }}>{formErrors.confirmPassword}</span>
+              )}
             </div>
 
             {/*User image */}
@@ -148,6 +197,9 @@ export default function Register() {
                     className="form-control"
                     id="image"
                   />
+                   {formErrors.image && (
+                <span className="error" style={{ color: 'red' }}>{formErrors.image}</span>
+              )}
                 </div>
               </div>
             </div>

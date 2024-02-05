@@ -20,9 +20,10 @@ export const userRegister = (formData) => {
             })
 
         } catch (error) {
+            console.log(error.response.data.error);
             dispatch({
                 type: FAIL,
-                payload: error.message
+                payload: error.response.data.error
             })
         }
     }
