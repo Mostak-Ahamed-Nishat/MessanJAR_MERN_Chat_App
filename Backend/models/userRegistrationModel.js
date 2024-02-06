@@ -35,11 +35,13 @@ const userSchema = new Schema({
 userSchema.methods.generateJWTAuthToken = function () {
     let token = jwt.sign({
         _id: this._id,
-        email: this.email
+        userName: this.userName,
+        email: this.email,
+        image: this.image
     }, process.env.jsonPrivateKey, {
         expiresIn: process.env.EXPIRE_TIME
     })
-    
+
     return token
 }
 

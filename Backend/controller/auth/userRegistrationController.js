@@ -52,19 +52,6 @@ const userRegistrationController = async (req, res) => {
 
         const validationErrors = []
 
-        //If any validation fails
-        if (error) {
-            error.details.map((err) => {
-                validationErrors.push({
-                    [err.path]: err.message
-                })
-            })
-
-            return res.status(400).json({
-                message: validationErrors
-            })
-        }
-
         //Check is the email exist in the database
         const emailIsExist = await User.findOne({
             email
@@ -72,11 +59,25 @@ const userRegistrationController = async (req, res) => {
 
         //if the mail already exists
         if (emailIsExist) {
-            validationErrors.push({
-                isExist: 'Email is already exist'
+            let emailExistError = {
+                email: "Email already exists"
+            }
+            validationErrors.push(emailExistError)
+
+            return res.status(401).send({
+                error: validationErrors
             })
-            return res.status(400).json({
-                message: validationErrors
+        }
+
+        //If any validation fails
+        if (error) {
+            error.details.map((err) => {
+                validationErrors.push({
+                    [err.path]: err.message
+                })
+            })
+            return res.status(401).send({
+                error: validationErrors
             })
         }
 
@@ -91,7 +92,9 @@ const userRegistrationController = async (req, res) => {
             // If image available
             let uploadImagePath
             if (image) {
+                //Rename the default image with new one
                 const imageNewName = Date.now() + '-' + Math.random() * 3642 + '-' + image.originalFilename
+
                 image.originalFilename = imageNewName
                 uploadImagePath = __dirname + './../../../Frontend/public/usersImg/' + `${image.originalFilename}`
                 //Upload the image into directory
@@ -115,16 +118,17 @@ const userRegistrationController = async (req, res) => {
             await data.save().then(
                 (data) => {
 
-                    //Get the generated token
+                    //Get the generated token from the userRegistration Model 
                     let token = data.generateJWTAuthToken()
 
                     if (token) {
 
+                        //Generate expiring time for cookie
                         const expirationDate = new Date();
                         expirationDate.setTime(expirationDate.getTime() + 10 * 24 * 60 * 60 * 1000); // 10 days from now
 
                         const options = {
-                            expires: expirationDate,
+                            maxAge: 24 * 60 * 60 * 7 * 1000,
                             httpOnly: true,
                         };
 
@@ -149,12 +153,12 @@ const userRegistrationController = async (req, res) => {
             if (error.image) {
                 fs.unlink(error.image, (err) => {
                     if (err) return res.status(500).json({
-                        message: "Server error with unlink image"
+                        error: "Server error with unlink image"
                     })
                 })
             }
             return res.status(500).json({
-                message: error.error
+                error: error.error
             })
         }
     })

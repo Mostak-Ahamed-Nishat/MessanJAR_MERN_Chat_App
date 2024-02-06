@@ -16,8 +16,9 @@ if (!process.env.jsonPrivateKey) {
 
 
 // Use cors for cross connection
-app.use(cors())
+app.use(cors());
 
+app.use(cookieParser());
 //For URL-encoded payloads
 app.use(express.json());
 
@@ -31,7 +32,7 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-app.use(cookieParser());
+
 
 
 //Routers

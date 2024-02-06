@@ -1,7 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { authAction } from "../redux/actions/auth/authAction";
 
 export default function Login() {
+  const dispatch = useDispatch();
+
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+
+  //On input change
+  const onChangeHandler = (e) => {
+    e.preventDefault();
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //on Submit handler
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("email", state.email);
+    formData.append("password", state.password);
+    //Hit the api
+    dispatch(authAction(formData));
+  };
+
+  
+
   return (
     <div className="register">
       {/* Register Card */}
@@ -14,7 +44,7 @@ export default function Login() {
         {/* Register Body */}
         <div className="card-body">
           {/* Card Input Form */}
-          <form action="">
+          <form action="" onSubmit={onSubmitHandler}>
             {/* Email */}
             <div className="form-group">
               <label htmlFor="email">User Email</label>
@@ -24,6 +54,8 @@ export default function Login() {
                 className="form-control"
                 placeholder="Enter your email"
                 id="email"
+                value={state.email}
+                onChange={onChangeHandler}
               />
             </div>
 
@@ -36,12 +68,24 @@ export default function Login() {
                 className="form-control"
                 placeholder="Enter your password"
                 id="password"
+                value={state.password}
+                onChange={onChangeHandler}
               />
             </div>
 
             <div className="form-group">
-              <input type="submit" value="Login" className="btn" />
+              <button
+                className="btn"
+                style={{ marginTop: "15px" }}
+                type="submit"
+              >
+                Login
+              </button>
             </div>
+
+            {/* <div  className="form-group">
+              <input type="submit" value="Login" className="btn" />
+            </div> */}
 
             <div className="form-group">
               <span>

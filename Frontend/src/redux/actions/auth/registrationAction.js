@@ -8,9 +8,13 @@ export const userRegister = (formData) => {
 
     return async (dispatch) => {
         try {
-            console.log("Hit the API");
             let res = await axios.post('http://localhost:3000/api/auth/user-register', formData)
-            localStorage.setItem('authToken', res.data.token)
+
+            //set the token to cookie 
+            document.cookie = `authToken=${res.data.token}`
+
+            // localStorage.setItem('authToken', res.data.token)
+
             dispatch({
                 type: SUCCESS,
                 payload: {
@@ -20,7 +24,7 @@ export const userRegister = (formData) => {
             })
 
         } catch (error) {
-            console.log(error.response.data.error);
+            console.log(error);
             dispatch({
                 type: FAIL,
                 payload: error.response.data.error

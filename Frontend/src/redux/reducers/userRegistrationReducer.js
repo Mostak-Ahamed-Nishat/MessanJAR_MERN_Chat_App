@@ -29,6 +29,7 @@ const decodeToken = (token) => {
     if (new Date() > expireTime) {
         return null
     }
+    
     return decodeTokenData
 }
 
@@ -49,9 +50,6 @@ if (token) {
     }
 }
 
-console.log("Initial state from reducers: ")
-console.log(initialState);
-
 
 //Decode jwt token
 export const userRegistrationReducer = (state = initialState, action) => {
@@ -60,16 +58,14 @@ export const userRegistrationReducer = (state = initialState, action) => {
         type
     } = action
 
-
-
-
     switch (type) {
         case FAIL:
             return {
                 ...state,
                 loading: false,
-                    isError: true,
-                    errors: [
+                isSuccess:false,
+                isError: true,
+                errors: [
                         ...payload
                     ]
             };
@@ -80,12 +76,11 @@ export const userRegistrationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                    isSuccess: true,
-                    success: payload.data,
-                    isError: false,
-                    isAuthenticated: true,
-                    message: payload.data,
-                    data: [userData]
+                isSuccess: true,
+                success: payload.data,
+                isError: false,
+                message: payload.data,
+                // data: [userData]
             }
 
 

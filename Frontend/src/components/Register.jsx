@@ -1,32 +1,26 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+
+import { useNavigate, Link } from "react-router-dom";
 // import isImageByContentType from "../utils/isImage";
 import { useDispatch, useSelector } from "react-redux";
 import { userRegister } from "../redux/actions/auth/registrationAction";
 import { useAlert } from "react-alert";
 
 export default function Register() {
+  const navigate = useNavigate();
   //Get the data from Redux after form submission
   const dispatch = useDispatch();
-  const {
-    loading,
-    isError,
-    isSuccess,
-    isAuthenticated,
-    success,
-    errors,
-    message,
-    data,
-  } = useSelector((state) => state.registration);
+  const { loading, isError, isSuccess, success, errors, message, data } =
+    useSelector((state) => state.registration);
 
   //Call the React alert hock
   const alert = useAlert();
 
   const [state, setState] = useState({
-    userName: "Nishat",
-    email: "nishat@gmail.com",
-    password: "12345678",
-    confirmPassword: "12345678",
+    userName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
     image: "",
   });
 
@@ -36,7 +30,7 @@ export default function Register() {
   //Error state
   const [formErrors, setFormErrors] = useState({});
 
-  //Input Handler
+   //Input Handler
   const inputHandler = (e) => {
     setState({
       ...state,
@@ -73,25 +67,32 @@ export default function Register() {
     dispatch(userRegister(formData));
   };
 
-  //
+
+
   useEffect(() => {
-    if (isSuccess && isError) {
-      alert.success(success);
-    }
-
-    if (isError) {
-
+    if (isError && errors.length > 0) {
       let errorList = {};
-
-      errors.forEach((item) => {
+      errors.map((item) => {
         const key = Object.keys(item); // Assuming each payload item has only one key
         const value = item[key];
         errorList[key] = value;
       });
-
       setFormErrors(errorList);
     }
-  }, [alert, errors, isError, isSuccess, success]);
+    if (isSuccess) {
+      setState({
+        userName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        image: "",
+      });
+      setFormErrors({})
+      alert.success(message)
+    }
+  }, [alert, errors, isError, isSuccess, message, navigate, success]);
+
+
 
   return (
     <div className="register">
@@ -123,7 +124,9 @@ export default function Register() {
               />
 
               {formErrors.userName && (
-                <span className="error" style={{ color: 'red' }}>{formErrors.userName}</span>
+                <span className="error" style={{ color: "red" }}>
+                  {formErrors.userName}
+                </span>
               )}
             </div>
 
@@ -141,8 +144,10 @@ export default function Register() {
                 }}
                 value={state.email}
               />
-               {formErrors.email && (
-                <span className="error" style={{ color: 'red' }}>{formErrors.email}</span>
+              {formErrors.email && (
+                <span className="error" style={{ color: "red" }}>
+                  {formErrors.email}
+                </span>
               )}
             </div>
 
@@ -160,8 +165,10 @@ export default function Register() {
                 }}
                 value={state.password}
               />
-               {formErrors.password && (
-                <span className="error" style={{ color: 'red' }}>{formErrors.password}</span>
+              {formErrors.password && (
+                <span className="error" style={{ color: "red" }}>
+                  {formErrors.password}
+                </span>
               )}
             </div>
 
@@ -177,8 +184,10 @@ export default function Register() {
                 onChange={inputHandler}
                 value={state.confirmPassword}
               />
-               {formErrors.confirmPassword && (
-                <span className="error" style={{ color: 'red' }}>{formErrors.confirmPassword}</span>
+              {formErrors.confirmPassword && (
+                <span className="error" style={{ color: "red" }}>
+                  {formErrors.confirmPassword}
+                </span>
               )}
             </div>
 
@@ -197,9 +206,11 @@ export default function Register() {
                     className="form-control"
                     id="image"
                   />
-                   {formErrors.image && (
-                <span className="error" style={{ color: 'red' }}>{formErrors.image}</span>
-              )}
+                  {formErrors.image && (
+                    <span className="error" style={{ color: "red" }}>
+                      {formErrors.image}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
