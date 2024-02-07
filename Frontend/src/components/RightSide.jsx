@@ -1,6 +1,7 @@
 import { FaPhoneAlt, FaVideo, FaRocketchat } from "react-icons/fa";
 import Messages from "./Messages";
 import MessageInbox from "./MessageInbox";
+import MessageInfo from "./MessageInfo";
 
 export default function Media() {
   return (
@@ -39,11 +40,14 @@ export default function Media() {
 
               {/* Message Conversations  */}
               <Messages />
-              <MessageInbox/>
+              <MessageInbox />
             </div>
           </div>
 
-          <div className="col-4">User About Page</div>
+          {/* Media page  */}
+          <div className="col-4">
+            <MessageInfo/>
+          </div>
         </div>
       </div>
     </div>
