@@ -2,6 +2,7 @@ import React from "react";
 import { FaEllipsisH, FaRegEdit, FaSearch } from "react-icons/fa";
 import ActiveFriends from "./ActiveFriends";
 import Friends from "./Friends";
+import RightSide from "./RightSide";
 
 export default function Messanjar() {
   return (
@@ -74,6 +75,9 @@ export default function Messanjar() {
             </div>
           </div>
         </div>
+
+        {/* RightSide  */}
+        <RightSide />
       </div>
     </div>
   );
