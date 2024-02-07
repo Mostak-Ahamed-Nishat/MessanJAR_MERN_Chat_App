@@ -90,7 +90,7 @@ export default function Register() {
       setFormErrors({})
       alert.success(message)
     }
-  }, [alert, errors, isError, isSuccess, message, navigate, success]);
+  }, [alert, errors, isError, isSuccess, message, success]);
 
 
 

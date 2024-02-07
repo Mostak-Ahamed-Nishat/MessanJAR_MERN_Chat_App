@@ -1,26 +1,37 @@
 import axios from "axios"
+
 import {
-    getAuthToken
-} from "../../../../lib/getAuthToken"
+    AUTH_FAIL,
+    AUTH_SUCCESS
+} from "../../actionTypes/authTypes"
 
 export const authAction = (formData) => {
     return async (dispatch) => {
         try {
 
             //Get the token from browser cookies
-            const token = getAuthToken('authToken')
-
             const res = await axios.post('http://localhost:3000/api/auth/login', formData, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 }
             })
 
+            //Set the cookie to the cookie
             document.cookie = `authToken=${res.data.token}`
 
+            dispatch({
+                type: AUTH_SUCCESS,
+                payload: {
+                    data: res.data.message,
+                    token: res.data.token
+                }
+            })
         } catch (error) {
-            console.log(error.response.data.error);
+            console.log(error);
+            dispatch({
+                type: AUTH_FAIL,
+                payload: error.response.data.error ? error.response.data.error : ""
+            })
         }
     }
 }

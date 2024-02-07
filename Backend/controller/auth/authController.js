@@ -55,8 +55,13 @@ const authController = async (req, res, ) => {
 
         //IF user does not exist
         if (!user) {
+
+            validationErrors.push({
+                email: "User not found"
+            })
+
             return res.status(401).json({
-                error: "User not found"
+                error: validationErrors
             })
         }
 
@@ -67,8 +72,13 @@ const authController = async (req, res, ) => {
 
             //If password incorrect
             if (!matchPassword) {
+
+                validationErrors.push({
+                    password: "Email or password Incorrect"
+                })
+
                 return res.status(403).json({
-                    error: "Email or password Incorrect"
+                    error: validationErrors
                 })
             }
 

@@ -1,15 +1,20 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { authAction } from "../redux/actions/auth/authAction";
+import { useAlert } from "react-alert";
 
 export default function Login() {
   const dispatch = useDispatch();
-
+  const { loading, isError, isSuccess, success, errors, message, data } =
+    useSelector((state) => state.auth);
+  const alert = useAlert();
   const [state, setState] = useState({
     email: "",
     password: "",
   });
+
+  const [formErrors, setFormErrors] = useState({});
 
   //On input change
   const onChangeHandler = (e) => {
@@ -30,7 +35,31 @@ export default function Login() {
     dispatch(authAction(formData));
   };
 
-  
+  //After effect the login
+  useEffect(() => {
+    if (isError && errors.length > 0) {
+      let errorList = {};
+      errors.map((item) => {
+        const key = Object.keys(item); // Assuming each payload item has only one key
+        const value = item[key];
+        errorList[key] = value;
+      });
+      setFormErrors(errorList);
+    }
+
+    if (isSuccess) {
+      console.log(isSuccess);
+      setState({
+        userName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        image: "",
+      });
+      setFormErrors({});
+      alert.success(message);
+    }
+  }, [errors, isError, isSuccess, message]);
 
   return (
     <div className="register">
@@ -57,6 +86,11 @@ export default function Login() {
                 value={state.email}
                 onChange={onChangeHandler}
               />
+              {formErrors.email && (
+                <span className="error" style={{ color: "red" }}>
+                  {formErrors.email}
+                </span>
+              )}
             </div>
 
             {/* Password */}
@@ -71,6 +105,11 @@ export default function Login() {
                 value={state.password}
                 onChange={onChangeHandler}
               />
+              {formErrors.password && (
+                <span className="error" style={{ color: "red" }}>
+                  {formErrors.password}
+                </span>
+              )}
             </div>
 
             <div className="form-group">
