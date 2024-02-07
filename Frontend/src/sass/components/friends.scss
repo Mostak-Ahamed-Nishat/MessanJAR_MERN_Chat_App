@@ -10,14 +10,16 @@
     }
 
     .hover-friend.active {
+        
         background-color: var(--active-color);
     }
 
     .hover-friend {
         cursor: pointer;
 
+        // 
         &:hover {
-            background-color: var(--chat-bg-color);
+            background-color: #a79bec;
             color: #fff;
             transition: all 750ms !important;
         }
