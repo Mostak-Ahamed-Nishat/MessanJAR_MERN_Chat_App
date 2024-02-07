@@ -1,5 +1,7 @@
 import React from "react";
 import { FaEllipsisH, FaRegEdit, FaSearch } from "react-icons/fa";
+import ActiveFriends from "./ActiveFriends";
+import Friends from "./Friends";
 
 export default function Messanjar() {
   return (
@@ -7,7 +9,6 @@ export default function Messanjar() {
       <div className="row">
         <div className="col-3">
           <div className="left-side">
-
             {/* TOP Bar */}
             <div className="top">
               <div className="image-name">
@@ -50,14 +51,27 @@ export default function Messanjar() {
             </div>
 
             {/* Active friend list show  */}
-            <div className="active-friend"></div>
-
-            {/* friends  */}
-            <div className="friends">
-              <div className="hover-friend"></div>
+            <div className="active-friends">
+              <ActiveFriends />
             </div>
 
+            {/*Chatting friends  */}
+            <div className="friends">
+              <div className="hover-friend">
+                <Friends />
+              </div>
+              <div className="hover-friend">
+                <Friends />
+              </div>
 
+              <div className="hover-friend">
+                <Friends />
+              </div>
+
+              <div className="hover-friend">
+                <Friends />
+              </div>
+            </div>
           </div>
         </div>
       </div>
