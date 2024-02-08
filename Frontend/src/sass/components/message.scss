@@ -6,140 +6,96 @@
     &::-webkit-scrollbar {
         overflow: hidden;
     }
+}
 
-    .friend_connect {
+.my-message {
+    .message {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
-        margin-top: 10px;
-        color: var(--text-color);
-
-        img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-        }
-
-        h3 {
-            margin-top: 10px;
-        }
-    }
-
-    .my-message {
-        float: right;
-
-        .my-text {
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
-            width: 370px;
-            flex-direction: column;
-
-            img.img,
-            span {
-                width: 14px;
-                height: 14px;
-                border-radius: 50%;
-                margin: 3px 0px 0px 0px;
-                color: var(--text-color);
-            }
-
-            .my {
-                background-color: var(--my-message-bg);
-                color: var(--text-white);
-            }
-
-            .message-text {
-                text-align: end;
-                padding: 10px;
-                border-radius: 10px;
-
-                img {
-                    width: 220px;
-                    height: 270px;
-                    margin-right: 0px;
-                    border-radius: 5px;
-                    overflow: hidden;
-                    object-fit: cover;
-
-                }
-            }
-
-        }
-
-        .time {
-            text-align: end;
-            padding: 5px 0px;
-            color: #727272d9;
-            font-size: 12px;
-        }
-
-    }
-
-    .fd-message {
-        float: left;
-
-        .fd-text {
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-start;
-            width: 370px;
-
-            .fd {
-                background-color: var(--fd-message-bg);
-                color: var(--text-color);
-            }
-
-            .message-text {
-                text-align: start;
-                border-radius: 10px;
-
-                img {
-                    width: 220px;
-                    height: 270px;
-                    margin-right: 0px;
-                    border-radius: 5px;
-                    overflow: hidden;
-                    object-fit: cover;
-
-                }
-            }
-        }
+        justify-content: end;
+        margin-right: 0px;
     }
 }
 
-.image-message-time,
-.image-message {
-    .userImage {
+
+
+
+.my-text {
+    background-color: #b2edff;
+    /* Set your desired background color for my-message */
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    max-width: 50%;
+
+    img {
+        max-width: 200px;
+        height: auto;
+        display: block;
+        border-radius: 10px;
+        float: right;
+    }
+
+    &:has(img) {
+        background-color: transparent;
+        padding: 0;
+    }
+
+}
+
+
+
+.time {
+    display: flex;
+    justify-content: end;
+    margin-right: 65px;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.fd-time {
+    margin-top: 5px;
+    justify-content: start !important;
+    margin-left: 70px !important;
+}
+
+
+//Friend Message
+.fd-message {
+    .message {
+        display: flex;
+        align-items: center;
+        justify-content: start;
         margin-left: 10px;
     }
 
-    display: flex;
+    .fd-text {
+        background-color: red;
+        /* Set your desired background color for my-message */
+        padding: 10px;
+        border-radius: 5px;
+        margin-left: 10px;
+        max-width: 50%;
 
-    img {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        overflow: hidden;
-        margin-right: 1px;
+        img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            float: left;
+        }
+    
+        &:has(img) {
+            background-color: transparent;
+            padding: 0;
+        }
     }
 
-    .message-text {
-        padding: 8px;
-        color: #fff;
-        background-color: #7360DF;
-        font-size: 14px;
-        font-weight: 400;
-    }
-
-    .time {
-        padding: 5px 0px;
-        color: #727272d9;
-        font-size: 12px;
-    }
 }
 
-.typing-message {
-    padding: 0px 10px;
+.user-image img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
 }

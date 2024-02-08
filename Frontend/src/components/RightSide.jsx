@@ -7,6 +7,7 @@ export default function Media() {
   return (
     <div className="col-9">
       <div className="right-side">
+        <input type="checkbox" id="dot" />
         <div className="row">
           <div className="col-8">
             <div className="message-send-show">
@@ -33,7 +34,9 @@ export default function Media() {
                   </div>
 
                   <div className="icon">
-                    <FaRocketchat />
+                    <label htmlFor="dot">
+                      <FaRocketchat />
+                    </label>
                   </div>
                 </div>
               </div>
@@ -46,7 +49,7 @@ export default function Media() {
 
           {/* Media page  */}
           <div className="col-4">
-            <MessageInfo/>
+            <MessageInfo />
           </div>
         </div>
       </div>
