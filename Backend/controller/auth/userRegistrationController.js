@@ -91,12 +91,14 @@ const userRegistrationController = async (req, res) => {
 
             // If image available
             let uploadImagePath
+            let uploadedImgName
             if (image) {
                 //Rename the default image with new one
                 const imageNewName = Date.now() + '-' + Math.random() * 3642 + '-' + image.originalFilename
 
                 image.originalFilename = imageNewName
                 uploadImagePath = __dirname + './../../../Frontend/public/usersImg/' + `${image.originalFilename}`
+                uploadedImgName = image.originalFilename
                 //Upload the image into directory
                 fs.copyFile(image.filepath, uploadImagePath, (err) => {
                     if (err) {
@@ -112,7 +114,7 @@ const userRegistrationController = async (req, res) => {
                 userName,
                 email,
                 password: hashPassword,
-                image: uploadImagePath
+                image: uploadedImgName
             })
 
             await data.save().then(

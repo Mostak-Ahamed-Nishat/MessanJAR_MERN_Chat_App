@@ -8,8 +8,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Messanjar />} />
-          <Route path="/messanjar/login" element={<Login />} />
+          <Route path="/messanjar" element={<Messanjar />} />
+          <Route path="/" element={<Login />} />
           <Route path="/messanjar/register" element={<Register />} />
         </Routes>
       </BrowserRouter>

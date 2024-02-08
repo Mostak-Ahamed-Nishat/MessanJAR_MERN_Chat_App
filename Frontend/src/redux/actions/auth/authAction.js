@@ -5,7 +5,9 @@ import {
     AUTH_SUCCESS
 } from "../../actionTypes/authTypes"
 
+
 export const authAction = (formData) => {
+
     return async (dispatch) => {
         try {
 
@@ -26,8 +28,10 @@ export const authAction = (formData) => {
                     token: res.data.token
                 }
             })
+
+         
+
         } catch (error) {
-            console.log(error.response.data.error);
             dispatch({
                 type: AUTH_FAIL,
                 payload: error.response.data.error ? error.response.data.error : ""

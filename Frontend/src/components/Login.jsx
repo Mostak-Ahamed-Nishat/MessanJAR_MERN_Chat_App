@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { authAction } from "../redux/actions/auth/authAction";
 import { useAlert } from "react-alert";
 
 export default function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loading, isError, isSuccess, success, errors, message, data } =
     useSelector((state) => state.auth);
   const alert = useAlert();
@@ -48,16 +49,13 @@ export default function Login() {
     }
 
     if (isSuccess) {
-      console.log(isSuccess);
       setState({
-        userName: "",
         email: "",
         password: "",
-        confirmPassword: "",
-        image: "",
       });
       setFormErrors({});
       alert.success(message);
+      navigate("/messanjar");
     }
   }, [errors, isError, isSuccess, message]);
 

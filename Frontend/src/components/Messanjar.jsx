@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEllipsisH, FaRegEdit, FaSearch } from "react-icons/fa";
 import ActiveFriends from "./ActiveFriends";
 import Friends from "./Friends";
@@ -7,14 +7,17 @@ import RightSide from "./RightSide";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../redux/actions/conversationListAction";
 
-
 export default function Messanjar() {
   const dispatch = useDispatch();
-  let { isSuccess ,data} = useSelector((state) => state.conversations);
+  let { isSuccess, data } = useSelector((state) => state.conversations);
+  const [conversations, setConversations] = useState([]);
 
   useEffect(() => {
     dispatch(getAllFriends());
-  }, [data, dispatch, isSuccess]);
+    if (data.length > 0 && isSuccess) {
+      setConversations([...data]);
+    }
+  }, [dispatch, isSuccess]);
 
   return (
     <div className="messenger">
@@ -70,9 +73,20 @@ export default function Messanjar() {
 
             {/*Chatting friends  */}
             <div className="friends">
-              <div className="hover-friend">
-                <Friends />
-              </div>
+              {/* Each conversation start */}
+
+              {conversations.length > 0
+                ? conversations.map((conversation) => {
+                    return (
+                      // eslint-disable-next-line react/jsx-key
+                      <div className="hover-friend">
+                        <Friends data={conversation} />
+                      </div>
+                    );
+                  })
+                : "No Conversation"}
+
+              {/* Each conversation End */}
             </div>
           </div>
         </div>
