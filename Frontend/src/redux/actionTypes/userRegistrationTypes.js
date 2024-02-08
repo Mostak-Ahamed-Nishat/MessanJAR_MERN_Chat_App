@@ -1,2 +1,2 @@
-export const FAIL = 'REGISTRATIO_FIAL'
-export const SUCCESS = 'REGISTRATIO_SUCCESS'
+export const FAIL = 'REGISTRATION_FAIL'
+export const SUCCESS = 'REGISTRATION_SUCCESS'

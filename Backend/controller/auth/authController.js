@@ -1,7 +1,7 @@
 const {
     authValidationSchema
 } = require("../../validations/authValidations")
-const User = require('../../models/userRegistrationModel');
+const User = require('../../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
@@ -95,7 +95,7 @@ const authController = async (req, res, ) => {
                     maxAge: 24 * 60 * 60 * 7 * 1000,
                     httpOnly: true,
                 };
-
+                req.session.userId = user._id
                 res.status(200).cookie('authToken', token, options).header('X-Auth-Token', token).json({
                     message: "User Login successfully",
                     token

@@ -44,6 +44,7 @@ export const authReducer = (state = initialState, action) => {
 
     switch (type) {
         case AUTH_FAIL:
+            console.log("Error payload")
             console.log(payload)
             return {
                 ...state,

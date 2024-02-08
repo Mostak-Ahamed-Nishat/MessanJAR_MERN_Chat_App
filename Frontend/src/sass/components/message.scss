@@ -11,19 +11,17 @@
 .my-message {
     .message {
         display: flex;
-        align-items: center;
+        align-items: self-start;
         justify-content: end;
         margin-right: 0px;
     }
 }
 
 
-
-
 .my-text {
-    background-color: #b2edff;
-    /* Set your desired background color for my-message */
-    padding: 10px;
+
+    background-color: var(--chat-bg-color);
+    padding: 15px;
     border-radius: 5px;
     margin-right: 10px;
     max-width: 50%;
@@ -51,6 +49,7 @@
     margin-right: 65px;
     font-size: 10px;
     margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .fd-time {
@@ -64,15 +63,14 @@
 .fd-message {
     .message {
         display: flex;
-        align-items: center;
+        align-items: self-start;
         justify-content: start;
         margin-left: 10px;
     }
 
     .fd-text {
-        background-color: red;
-        /* Set your desired background color for my-message */
-        padding: 10px;
+        background-color: var(--chat-bg-color);
+        padding: 15px;
         border-radius: 5px;
         margin-left: 10px;
         max-width: 50%;
@@ -84,7 +82,7 @@
             border-radius: 10px;
             float: left;
         }
-    
+
         &:has(img) {
             background-color: transparent;
             padding: 0;

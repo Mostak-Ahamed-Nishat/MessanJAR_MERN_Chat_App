@@ -18,12 +18,16 @@ import {
 import {
     authReducer
 } from './reducers/authReducer';
+import {
+    getAllConversationList
+} from './reducers/conversationListReducer';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
     registration: userRegistrationReducer,
-    auth: authReducer
+    auth: authReducer,
+    conversations: getAllConversationList
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

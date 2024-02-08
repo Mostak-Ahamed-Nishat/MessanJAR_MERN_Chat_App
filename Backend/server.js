@@ -7,6 +7,7 @@ const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 
 if (!process.env.jsonPrivateKey) {
@@ -17,6 +18,11 @@ if (!process.env.jsonPrivateKey) {
 
 // Use cors for cross connection
 app.use(cors());
+app.use(session({
+    secret: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: true,
+}))
 
 app.use(cookieParser());
 //For URL-encoded payloads

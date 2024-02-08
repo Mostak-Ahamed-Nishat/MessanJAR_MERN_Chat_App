@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaEllipsisH, FaRegEdit, FaSearch } from "react-icons/fa";
 import ActiveFriends from "./ActiveFriends";
 import Friends from "./Friends";
 import RightSide from "./RightSide";
 
+import { useDispatch, useSelector } from "react-redux";
+import { getAllFriends } from "../redux/actions/conversationListAction";
+
+
 export default function Messanjar() {
+  const dispatch = useDispatch();
+  let { isSuccess ,data} = useSelector((state) => state.conversations);
+
+  useEffect(() => {
+    dispatch(getAllFriends());
+  }, [data, dispatch, isSuccess]);
+
   return (
     <div className="messenger">
       <div className="row">
@@ -21,6 +32,7 @@ export default function Messanjar() {
                     alt=""
                   />
                 </div>
+
                 {/* User name  */}
                 <div className="name">
                   <h3>MR.Ahamed</h3>
@@ -58,17 +70,6 @@ export default function Messanjar() {
 
             {/*Chatting friends  */}
             <div className="friends">
-              <div className="hover-friend">
-                <Friends />
-              </div>
-              <div className="hover-friend">
-                <Friends />
-              </div>
-
-              <div className="hover-friend">
-                <Friends />
-              </div>
-
               <div className="hover-friend">
                 <Friends />
               </div>

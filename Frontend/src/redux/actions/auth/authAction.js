@@ -27,7 +27,7 @@ export const authAction = (formData) => {
                 }
             })
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data.error);
             dispatch({
                 type: AUTH_FAIL,
                 payload: error.response.data.error ? error.response.data.error : ""
