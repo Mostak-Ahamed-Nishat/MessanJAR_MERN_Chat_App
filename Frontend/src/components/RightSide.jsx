@@ -3,7 +3,7 @@ import Messages from "./Messages";
 import MessageInbox from "./MessageInbox";
 import MessageInfo from "./MessageInfo";
 
-export default function Media() {
+export default function Media({ currentFriend }) {
   return (
     <div className="col-9">
       <div className="right-side">
@@ -15,12 +15,12 @@ export default function Media() {
                 <div className="image-name">
                   <div className="image">
                     <img
-                      src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      src={`../../public/usersImg/${currentFriend.image}`}
                       alt=""
                     />
                   </div>
                   <div className="name">
-                    <h3> GM Sumon </h3>
+                    <h3> {currentFriend.userName} </h3>
                   </div>
                 </div>
 
@@ -49,7 +49,7 @@ export default function Media() {
 
           {/* Media page  */}
           <div className="col-4">
-            <MessageInfo />
+            <MessageInfo messageInfo={currentFriend} />
           </div>
         </div>
       </div>

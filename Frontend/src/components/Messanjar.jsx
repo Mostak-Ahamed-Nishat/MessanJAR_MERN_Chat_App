@@ -23,7 +23,8 @@ export default function Messanjar() {
   //Conversation list
   const [conversations, setConversations] = useState([]);
   //Current chat open
-  const [currentFriend, setCurrentFriend] = useState({});
+  const [currentFriend, setCurrentFriend] = useState("");
+  console.log(currentFriend);
 
   useEffect(() => {
     setAuthUserData({ ...authData });
@@ -93,16 +94,15 @@ export default function Messanjar() {
               {/* Each conversation start */}
 
               {conversations.length > 0
-                ? conversations.map((conversation) => {
-                    if (conversation.email !== authData.email) {
-                      return (
-                        // eslint-disable-next-line react/jsx-key
-                        <div className="hover-friend">
-                          <Friends data={conversation} />
-                        </div>
-                      );
-                    }
-                  })
+                ? conversations.map((conversation) => (
+                    // eslint-disable-next-line react/jsx-key
+                    <div
+                      className="hover-friend"
+                      onClick={() => setCurrentFriend(conversation)}
+                    >
+                      <Friends data={conversation} />
+                    </div>
+                  ))
                 : "No Conversation"}
 
               {/* Each conversation End */}
@@ -111,7 +111,11 @@ export default function Messanjar() {
         </div>
 
         {/* RightSide  */}
-        <RightSide />
+        {currentFriend ? (
+          <RightSide currentFriend={currentFriend} />
+        ) : (
+          <h1>Messanjar</h1>
+        )}
       </div>
     </div>
   );
