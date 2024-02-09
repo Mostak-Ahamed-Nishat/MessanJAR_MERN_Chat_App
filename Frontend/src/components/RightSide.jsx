@@ -3,7 +3,12 @@ import Messages from "./Messages";
 import MessageInbox from "./MessageInbox";
 import MessageInfo from "./MessageInfo";
 
-export default function Media({ currentFriend }) {
+export default function Media({
+  currentFriend,
+  textHandler,
+  message,
+  messageSendHandler,
+}) {
   return (
     <div className="col-9">
       <div className="right-side">
@@ -43,7 +48,11 @@ export default function Media({ currentFriend }) {
 
               {/* Message Conversations  */}
               <Messages />
-              <MessageInbox />
+              <MessageInbox
+                textHandler={textHandler}
+                message={message}
+                messageSendHandler={messageSendHandler}
+              />
             </div>
           </div>
 

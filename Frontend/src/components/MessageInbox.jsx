@@ -5,7 +5,11 @@ import {
   FaGift,
 } from "react-icons/fa";
 
-export default function MessageInbox() {
+export default function MessageInbox({
+  textHandler,
+  message,
+  messageSendHandler,
+}) {
   const emojis = [
     "😀",
     "😄",
@@ -57,16 +61,20 @@ export default function MessageInbox() {
           id="message"
           placeholder="Aa"
           className="form-control"
+          value={message}
+          onChange={textHandler}
         />
 
         <div className="file hover-gift">
           <label htmlFor="emoji">
-            <FaPaperPlane />
+            <div className="file">❤</div>
           </label>
         </div>
       </div>
-
-      <div className="file">❤</div>
+      {/* messageSendHandler */}
+      <div className="send-icon">
+        <FaPaperPlane onClick={messageSendHandler} />
+      </div>
 
       <div className="emoji-section">
         <div className="emoji">

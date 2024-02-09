@@ -24,18 +24,42 @@ export default function Messanjar() {
   const [conversations, setConversations] = useState([]);
   //Current chat open
   const [currentFriend, setCurrentFriend] = useState("");
-  console.log(currentFriend);
 
+  //Get the message from text box
+  const [message, setMessage] = useState("");
+
+  //Chat inbox handler
+  const textHandler = (e) => {
+    e.preventDefault();
+    setMessage(e.target.value);
+  };
+
+  //Sending message handler
+  const messageSendHandler = (e) => {
+    e.preventDefault();
+    console.log(message);
+  };
+
+  //User Authentication
   useEffect(() => {
     setAuthUserData({ ...authData });
   }, [authSuccess, authData]);
 
+  //Get user conversation
   useEffect(() => {
     dispatch(getAllFriends());
     if (data.length > 0 && isSuccess) {
       setConversations([...data]);
     }
   }, [dispatch, isSuccess]);
+
+  //Select the first conversation as chatbox data
+
+  useEffect(() => {
+    if (conversations.length > 0) {
+      setCurrentFriend(conversations[0]);
+    }
+  }, [conversations]);
 
   return (
     <div className="messenger">
@@ -112,7 +136,12 @@ export default function Messanjar() {
 
         {/* RightSide  */}
         {currentFriend ? (
-          <RightSide currentFriend={currentFriend} />
+          <RightSide
+            currentFriend={currentFriend}
+            message={message}
+            textHandler={textHandler}
+            messageSendHandler={messageSendHandler}
+          />
         ) : (
           <h1>Messanjar</h1>
         )}
