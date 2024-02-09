@@ -38,14 +38,15 @@ export default function Messanjar() {
   //Sending message handler
   const messageSendHandler = (e) => {
     e.preventDefault();
-    const messageData = {
+    const data = {
       sender: authUserData.userName,
       id: authUserData._id,
       message: message ? message : "",
     };
-    dispatch(messageAction(messageData));
+
+    dispatch(messageAction(data));
     setMessage("");
-    console.log(messageData);
+    console.log(data);
   };
 
   //User Authentication

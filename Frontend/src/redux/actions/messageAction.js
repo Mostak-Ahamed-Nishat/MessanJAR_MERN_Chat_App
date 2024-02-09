@@ -6,24 +6,20 @@ import {
 
 
 
-export const messageAction = (data) => {
-    async (dispatch) => {
-        try {
-            const res = await axiosInstance.post('/messages', data)
-            console.log(res.data);
+export const messageAction = (data) => async (dispatch) => {
+    try {
+        const res = await axiosInstance.post('/messages', data)
+        console.log(res.data);
+        dispatch({
+            type: MESSAGE_SENT_SUCCESS,
+            payload: res.data.data
+        })
 
-            dispatch({
-                type: MESSAGE_SENT_SUCCESS,
-                payload: res.data.data
-            })
-
-        } catch (error) {
-            console.log(error);
-
-            dispatch({
-                type: MESSAGE_SENT_FAIL,
-                payload: error.response.data.error
-            })
-        }
+    } catch (error) {
+        console.log(error.response.data);
+        dispatch({
+            type: MESSAGE_SENT_FAIL,
+            payload: error.response.data.error
+        })
     }
 }
