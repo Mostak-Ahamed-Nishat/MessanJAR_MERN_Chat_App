@@ -57,7 +57,7 @@ export default function Login() {
       alert.success(message);
       navigate("/messanjar");
     }
-  }, [errors, isError, isSuccess, message]);
+  }, [alert, errors, isError, isSuccess, message, navigate]);
 
   return (
     <div className="register">

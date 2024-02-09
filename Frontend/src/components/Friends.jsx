@@ -1,7 +1,6 @@
 import React from "react";
 
 const Friends = ({ data }) => {
-  console.log(data);
   return (
     <div className="friend">
       <div className="friend-image">

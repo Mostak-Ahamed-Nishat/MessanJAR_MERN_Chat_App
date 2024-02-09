@@ -1,25 +1,25 @@
-import axios from "axios"
-
 import {
     AUTH_FAIL,
     AUTH_SUCCESS
 } from "../../actionTypes/authTypes"
+import axiosInstance from "../../../utils/axios"
 
 
 export const authAction = (formData) => {
 
     return async (dispatch) => {
         try {
-
             //Get the token from browser cookies
-            const res = await axios.post('http://localhost:3000/api/auth/login', formData, {
+            // const res = await axiosInstance.post('http://localhost:3001/api/auth/login', formData, {
+            const res = await axiosInstance.post('/auth/login', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })
 
+            localStorage.setItem('authToken', res.data.token);
             //Set the cookie to the cookie
-            document.cookie = `authToken=${res.data.token}`
+            document.cookie = `authToken=${res.data.token};SameSite=None; Secure`
 
             dispatch({
                 type: AUTH_SUCCESS,
@@ -28,8 +28,6 @@ export const authAction = (formData) => {
                     token: res.data.token
                 }
             })
-
-         
 
         } catch (error) {
             dispatch({

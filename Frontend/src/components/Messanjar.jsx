@@ -9,8 +9,25 @@ import { getAllFriends } from "../redux/actions/conversationListAction";
 
 export default function Messanjar() {
   const dispatch = useDispatch();
+
+  //Conversations list
   let { isSuccess, data } = useSelector((state) => state.conversations);
+
+  //Auth User
+  let { isSuccess: authSuccess, data: authData } = useSelector(
+    (state) => state.auth
+  );
+
+  //Auth user
+  const [authUserData, setAuthUserData] = useState({});
+  //Conversation list
   const [conversations, setConversations] = useState([]);
+  //Current chat open
+  const [currentFriend, setCurrentFriend] = useState({});
+
+  useEffect(() => {
+    setAuthUserData({ ...authData });
+  }, [authSuccess, authData]);
 
   useEffect(() => {
     dispatch(getAllFriends());
@@ -31,14 +48,14 @@ export default function Messanjar() {
                 <div className="image">
                   <img
                     // style={{ height: "100px", width: "100px" }}
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    src={`../../public/usersImg/${authUserData.image}`}
                     alt=""
                   />
                 </div>
 
                 {/* User name  */}
                 <div className="name">
-                  <h3>MR.Ahamed</h3>
+                  <h3>{authUserData.userName}</h3>
                 </div>
               </div>
               {/* Icon */}
@@ -77,12 +94,14 @@ export default function Messanjar() {
 
               {conversations.length > 0
                 ? conversations.map((conversation) => {
-                    return (
-                      // eslint-disable-next-line react/jsx-key
-                      <div className="hover-friend">
-                        <Friends data={conversation} />
-                      </div>
-                    );
+                    if (conversation.email !== authData.email) {
+                      return (
+                        // eslint-disable-next-line react/jsx-key
+                        <div className="hover-friend">
+                          <Friends data={conversation} />
+                        </div>
+                      );
+                    }
                   })
                 : "No Conversation"}
 

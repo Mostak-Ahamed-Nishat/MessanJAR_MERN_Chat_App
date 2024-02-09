@@ -3,24 +3,24 @@ import {
     getAuthToken
 } from "../../lib/getAuthToken";
 
-
-
 const axiosInstance = axios.create({
-    baseUrl: "http://localhost:3000/api/",
+    baseURL: "http://localhost:3001/api",
     withCredentials: true,
 });
 
+
 axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = getAuthToken('authToken'); // Implement a function to retrieve the token
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
+    async (config) => {
+            const token = await getAuthToken('authToken'); // a function to retrieve the token
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        },
+        (error) => {
+            // console.log("Bearer authentication error");
+            return Promise.reject(error);
         }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
 );
 
 

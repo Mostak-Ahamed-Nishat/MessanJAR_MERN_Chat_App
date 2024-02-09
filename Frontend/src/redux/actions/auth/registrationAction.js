@@ -3,17 +3,19 @@ import {
     FAIL,
     SUCCESS
 } from "../../actionTypes/userRegistrationTypes";
+import axiosInstance from "../../../utils/axios";
 
 export const userRegister = (formData) => {
 
     return async (dispatch) => {
         try {
-            let res = await axios.post('http://localhost:3000/api/auth/user-register', formData)
+            // let res = await axios.post('http://localhost:3000/api/auth/user-register', formData)
+            let res = await axiosInstance.post('/auth/user-register', formData)
 
             //set the token to cookie 
             document.cookie = `authToken=${res.data.token}`
 
-            // localStorage.setItem('authToken', res.data.token)
+            localStorage.setItem('authToken', res.data.token)
 
             dispatch({
                 type: SUCCESS,

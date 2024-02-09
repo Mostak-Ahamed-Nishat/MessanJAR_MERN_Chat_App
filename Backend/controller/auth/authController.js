@@ -93,9 +93,10 @@ const authController = async (req, res, ) => {
 
                 const options = {
                     maxAge: 24 * 60 * 60 * 7 * 1000,
-                    httpOnly: true,
+                    // httpOnly: true
                 };
-                req.session.userId = user._id
+                // req.session.userId = user._id
+
                 res.status(200).cookie('authToken', token, options).header('X-Auth-Token', token).json({
                     message: "User Login successfully",
                     token

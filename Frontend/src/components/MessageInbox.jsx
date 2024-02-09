@@ -71,7 +71,7 @@ export default function MessageInbox() {
       <div className="emoji-section">
         <div className="emoji">
           {emojis.map((e) => (
-            <span>{e}</span>
+            <span key={e}>{e}</span>
           ))}
         </div>
       </div>

@@ -8,6 +8,9 @@ import {
 } from "jwt-decode";
 
 
+const token = localStorage.getItem('authToken');
+const initialUserData = token ? jwtDecode(token) : null;
+
 const initialState = {
     loading: true,
     isError: false,
@@ -15,7 +18,7 @@ const initialState = {
     isAuthenticated: false,
     success: "",
     errors: [],
-    data: {}
+    data: initialUserData || {}
 }
 
 
@@ -29,25 +32,8 @@ const decodeToken = (token) => {
     if (new Date() > expireTime) {
         return null
     }
-    
+
     return decodeTokenData
-}
-
-
-//Get the token  from local storage
-const token = localStorage.getItem('authToken')
-//If the token data is available get the user data from the token and set on the local state
-if (token) {
-    //Get the user data from the token
-    const userDataFromToken = jwtDecode(token)
-    //If user data is available set on the local state
-    if (userDataFromToken) {
-        initialState.isAuthenticated = true
-        initialState.data = {
-            ...initialState.data,
-            ...userDataFromToken
-        }
-    }
 }
 
 
@@ -63,9 +49,9 @@ export const userRegistrationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                isSuccess:false,
-                isError: true,
-                errors: [
+                    isSuccess: false,
+                    isError: true,
+                    errors: [
                         ...payload
                     ]
             };
@@ -76,11 +62,12 @@ export const userRegistrationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                isSuccess: true,
-                success: payload.data,
-                isError: false,
-                message: payload.data,
-                // data: [userData]
+                    isAuthenticated: true,
+                    isSuccess: true,
+                    success: payload.data,
+                    isError: false,
+                    message: payload.data,
+                    data: userData || state.data,
             }
 
 

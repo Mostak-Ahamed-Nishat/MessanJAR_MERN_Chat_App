@@ -10,6 +10,10 @@ import {
 } from "../../../lib/getAuthToken";
 
 
+
+const userToken = localStorage.getItem('authToken');
+const initialUserData = userToken ? jwtDecode(userToken) : null;
+
 const initialState = {
     loading: true,
     isError: false,
@@ -17,22 +21,7 @@ const initialState = {
     isAuthenticated: false,
     success: "",
     errors: [],
-    data: {}
-}
-
-//Get the token  from local storage
-const token = getAuthToken('authToken')
-
-//If the token data is available get the user data from the token and set on the local state
-let user
-
-if (token) {
-    //Get the user data from the token
-    const userDataFromToken = jwtDecode(token)
-    //If user data is available set on the local state
-    if (userDataFromToken) {
-        user = userDataFromToken
-    }
+    data: initialUserData || {}
 }
 
 
@@ -41,6 +30,7 @@ export const authReducer = (state = initialState, action) => {
         payload,
         type
     } = action
+
 
     switch (type) {
         case AUTH_FAIL:
@@ -64,12 +54,7 @@ export const authReducer = (state = initialState, action) => {
                     success: payload.data,
                     isError: false,
                     message: payload.data,
-                    data: {
-                        ...user
-                    }
             }
-
-
             default:
                 return state;
     }

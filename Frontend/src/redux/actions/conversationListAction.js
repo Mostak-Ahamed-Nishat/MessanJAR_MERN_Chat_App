@@ -3,25 +3,24 @@ import {
     CONVERSATION_LIST_FAIL,
     CONVERSATION_LIST_SUCCESS
 } from '../actionTypes/conversationTypes';
+import axiosInstance from '../../utils/axios';
 
 export const getAllFriends = () => async (dispatch) => {
 
     try {
-        const friends = await axios.get('http://localhost:3000/api/messanjar/get-conversations')
-
-     
+        const friends = await axiosInstance.get('/messanjar/get-conversations')
         dispatch({
             type: CONVERSATION_LIST_SUCCESS,
             payload: friends.data.data
         })
 
-
-
     } catch (error) {
-        console.log("Conversation list getting error: " + error);
+        // console.log(error.response.data.error);
         dispatch({
             type: CONVERSATION_LIST_FAIL,
-            payload: error
+            payload: error.response.data.error
         })
+
+        window.location.href = 'http://localhost:5173/';
     }
 }
