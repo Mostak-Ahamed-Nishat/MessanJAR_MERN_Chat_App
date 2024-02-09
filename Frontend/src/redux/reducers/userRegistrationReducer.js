@@ -1,12 +1,11 @@
 import {
-    FAIL,
-    SUCCESS
-} from "../actionTypes/userRegistrationTypes";
-
-import {
     jwtDecode
 } from "jwt-decode";
 
+import {
+    FAIL,
+    SUCCESS
+} from "../actionTypes/actionTypes";
 
 const token = localStorage.getItem('authToken');
 const initialUserData = token ? jwtDecode(token) : null;

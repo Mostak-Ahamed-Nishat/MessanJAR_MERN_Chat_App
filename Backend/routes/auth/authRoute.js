@@ -7,6 +7,6 @@ const {
 
 
 router.post('/user-register', userRegistrationController)
-router.post('/login', authController)
+router.post('/login',authController)
 
 module.exports = router

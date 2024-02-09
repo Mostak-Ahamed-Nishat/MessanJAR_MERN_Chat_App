@@ -1,9 +1,11 @@
 import axios from 'axios';
+
+
+import axiosInstance from '../../utils/axios';
 import {
     CONVERSATION_LIST_FAIL,
     CONVERSATION_LIST_SUCCESS
-} from '../actionTypes/conversationTypes';
-import axiosInstance from '../../utils/axios';
+} from '../actionTypes/actionTypes';
 
 export const getAllFriends = () => async (dispatch) => {
 
@@ -15,7 +17,7 @@ export const getAllFriends = () => async (dispatch) => {
         })
 
     } catch (error) {
-        // console.log(error.response.data.error);
+        console.log(error.response.data.error);
         dispatch({
             type: CONVERSATION_LIST_FAIL,
             payload: error.response.data.error

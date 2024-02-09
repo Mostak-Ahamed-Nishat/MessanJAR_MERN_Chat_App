@@ -1,13 +1,15 @@
 import {
     jwtDecode
 } from "jwt-decode";
-import {
-    AUTH_FAIL,
-    AUTH_SUCCESS
-} from "../actionTypes/authTypes";
+
 import {
     getAuthToken
 } from "../../../lib/getAuthToken";
+
+import {
+    AUTH_FAIL,
+    AUTH_SUCCESS
+} from "../actionTypes/actionTypes";
 
 
 

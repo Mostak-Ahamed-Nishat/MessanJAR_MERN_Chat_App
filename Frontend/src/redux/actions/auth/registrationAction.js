@@ -1,9 +1,7 @@
 import axios from "axios";
-import {
-    FAIL,
-    SUCCESS
-} from "../../actionTypes/userRegistrationTypes";
+
 import axiosInstance from "../../../utils/axios";
+import { FAIL, SUCCESS } from "../../actionTypes/actionTypes";
 
 export const userRegister = (formData) => {
 

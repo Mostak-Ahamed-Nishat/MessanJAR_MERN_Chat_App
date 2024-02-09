@@ -1,7 +1,8 @@
 import {
     CONVERSATION_LIST_FAIL,
     CONVERSATION_LIST_SUCCESS
-} from "../actionTypes/conversationTypes";
+} from './../actionTypes/actionTypes';
+
 
 const initialState = {
     isLoading: true,

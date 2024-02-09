@@ -6,6 +6,7 @@ import RightSide from "./RightSide";
 
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../redux/actions/conversationListAction";
+import { messageAction } from "../redux/actions/messageAction";
 
 export default function Messanjar() {
   const dispatch = useDispatch();
@@ -37,7 +38,14 @@ export default function Messanjar() {
   //Sending message handler
   const messageSendHandler = (e) => {
     e.preventDefault();
-    console.log(message);
+    const messageData = {
+      sender: authUserData.userName,
+      id: authUserData._id,
+      message: message ? message : "",
+    };
+    dispatch(messageAction(messageData));
+    setMessage("");
+    console.log(messageData);
   };
 
   //User Authentication
@@ -121,13 +129,18 @@ export default function Messanjar() {
                 ? conversations.map((conversation) => (
                     // eslint-disable-next-line react/jsx-key
                     <div
-                      className="hover-friend"
+                      className={
+                        currentFriend._id == conversation._id
+                          ? "hover-friend active"
+                          : "hover-friend"
+                      }
                       onClick={() => setCurrentFriend(conversation)}
                     >
+                      {/* hover-friend */}
                       <Friends data={conversation} />
                     </div>
                   ))
-                : "No Conversation"}
+                : "No Conversation yet"}
 
               {/* Each conversation End */}
             </div>
