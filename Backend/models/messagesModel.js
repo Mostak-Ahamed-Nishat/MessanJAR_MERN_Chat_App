@@ -16,10 +16,6 @@ const messageSchema = new Schema({
         type: String,
         required: true,
     },
-    receiverName: {
-        type: String,
-        required: true,
-    },
     message: {
         text: {
             type: String,

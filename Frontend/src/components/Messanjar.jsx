@@ -6,7 +6,10 @@ import RightSide from "./RightSide";
 
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../redux/actions/conversationListAction";
-import { messageAction } from "../redux/actions/messageAction";
+import {
+  getMessageAction,
+  messageSendAction,
+} from "../redux/actions/messageAction";
 
 export default function Messanjar() {
   const dispatch = useDispatch();
@@ -29,6 +32,9 @@ export default function Messanjar() {
   //Get the message from text box
   const [message, setMessage] = useState("");
 
+  //get the messages from the database and show them in UI
+  const [previousMessages, setPreviousMessages] = useState([]);
+
   //Chat inbox handler
   const textHandler = (e) => {
     e.preventDefault();
@@ -39,12 +45,13 @@ export default function Messanjar() {
   const messageSendHandler = (e) => {
     e.preventDefault();
     const data = {
-      sender: authUserData.userName,
-      id: authUserData._id,
+      senderId: authUserData._id,
+      senderName: authUserData.userName,
+      receiverId: currentFriend._id,
       message: message ? message : "",
     };
 
-    dispatch(messageAction(data));
+    dispatch(messageSendAction(data));
     setMessage("");
     console.log(data);
   };
@@ -63,12 +70,16 @@ export default function Messanjar() {
   }, [dispatch, isSuccess]);
 
   //Select the first conversation as chatbox data
-
   useEffect(() => {
     if (conversations.length > 0) {
       setCurrentFriend(conversations[0]);
     }
   }, [conversations]);
+
+  useEffect(() => {
+    dispatch(getMessageAction(currentFriend._id));
+    
+  }, [currentFriend?._id, dispatch, currentFriend]);
 
   return (
     <div className="messenger">

@@ -2,6 +2,8 @@ import { FaPhoneAlt, FaVideo, FaRocketchat } from "react-icons/fa";
 import Messages from "./Messages";
 import MessageInbox from "./MessageInbox";
 import MessageInfo from "./MessageInfo";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function Media({
   currentFriend,
@@ -9,6 +11,20 @@ export default function Media({
   message,
   messageSendHandler,
 }) {
+  const [allMessages, setAllMessages] = useState([]);
+  const { isLoading, isSuccess, isError, error, messages } = useSelector(
+    (state) => state.messages
+  );
+
+  useEffect(() => {
+    if (isSuccess && !isError) {
+      setAllMessages([...messages]);
+    }
+  }, [isError, isSuccess, messages]);
+
+  console.log(isLoading);
+
+
   return (
     <div className="col-9">
       <div className="right-side">
@@ -47,7 +63,7 @@ export default function Media({
               </div>
 
               {/* Message Conversations  */}
-              <Messages />
+              {allMessages.length > 0 ? <Messages /> : ""}
               <MessageInbox
                 textHandler={textHandler}
                 message={message}
