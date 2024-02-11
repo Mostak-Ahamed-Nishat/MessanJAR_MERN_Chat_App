@@ -32,8 +32,6 @@ export default function Messanjar() {
   //Get the message from text box
   const [message, setMessage] = useState("");
 
-  //get the messages from the database and show them in UI
-  const [previousMessages, setPreviousMessages] = useState([]);
 
   //Chat inbox handler
   const textHandler = (e) => {
@@ -53,7 +51,6 @@ export default function Messanjar() {
 
     dispatch(messageSendAction(data));
     setMessage("");
-    console.log(data);
   };
 
   //User Authentication

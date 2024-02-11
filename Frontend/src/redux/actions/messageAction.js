@@ -30,14 +30,12 @@ export const messageSendAction = (data) => async (dispatch) => {
 //Get all the message with the open chat friend
 export const getMessageAction = (current_Open_Chat_Id_With_Friend) => async (dispatch) => {
     const id = current_Open_Chat_Id_With_Friend
-    console.log(id);
     try {
         const res = await axiosInstance.get(`/messages/chat/${id}`)
         dispatch({
             type: MESSAGES_GET_SUCCESS,
             payload: res.data.data
         })
-        console.log(res.data);
     } catch (error) {
         dispatch({
             type: MESSAGES_GET_FAIL,

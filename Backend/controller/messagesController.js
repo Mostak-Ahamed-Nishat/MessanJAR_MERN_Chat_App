@@ -54,7 +54,7 @@ const getMessages = async (req, res) => {
     try {
         const data = await Message.find({})
         const messages = data.filter(message => {
-            return message.senderId === authUserId.toString() && message.receiverId === friendConversationId.toString()
+            return (message.senderId === authUserId.toString() && message.receiverId === friendConversationId.toString() || message.receiverId === authUserId.toString() && message.senderId === friendConversationId.toString())
         })
         res.status(200).json({
             data: messages

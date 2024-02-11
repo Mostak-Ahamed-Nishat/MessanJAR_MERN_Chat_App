@@ -22,8 +22,6 @@ export default function Media({
     }
   }, [isError, isSuccess, messages]);
 
-  console.log(isLoading);
-
 
   return (
     <div className="col-9">
@@ -63,7 +61,9 @@ export default function Media({
               </div>
 
               {/* Message Conversations  */}
-              {allMessages.length > 0 ? <Messages /> : ""}
+
+              <Messages messages={allMessages} />
+
               <MessageInbox
                 textHandler={textHandler}
                 message={message}
