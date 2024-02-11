@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-export default function Messages({ messages }) {
+export default function Messages({ messages, scrollRef }) {
   const { data } = useSelector((state) => state.auth);
 
   const { _id: authUser } = data;
@@ -12,7 +12,7 @@ export default function Messages({ messages }) {
         if (authUser.toString() === msg.senderId.toString()) {
           return (
             // eslint-disable-next-line react/jsx-key
-            <div className="my-message">
+            <div ref={scrollRef} className="my-message" key={msg._id}>
               <div className="message">
                 <div className="my-text">
                   <p className="message-text">{msg?.message.text}</p>
@@ -27,12 +27,12 @@ export default function Messages({ messages }) {
               <div className="time">2 Jan 2022</div>
             </div>
           );
-        } 
+        }
 
-        if(authUser.toString() === msg.receiverId.toString()){
+        if (authUser.toString() === msg.receiverId.toString()) {
           return (
             // eslint-disable-next-line react/jsx-key
-            <div className="fd-message">
+            <div ref={scrollRef} className="fd-message" key={msg._id}>
               <div className="message">
                 <div className="user-image fd-image">
                   <img
@@ -48,7 +48,6 @@ export default function Messages({ messages }) {
             </div>
           );
         }
-
       })}
     </div>
   );

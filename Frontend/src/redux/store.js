@@ -24,13 +24,17 @@ import {
 import {
     getMessagesReducer
 } from './reducers/getMessageReducer';
+import {
+    sendMessageReducer
+} from './reducers/sendMessageReducer';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
     registration: userRegistrationReducer,
     auth: authReducer,
     conversations: getAllConversationList,
-    messages: getMessagesReducer
+    messages: getMessagesReducer,
+    sendMessage: sendMessageReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

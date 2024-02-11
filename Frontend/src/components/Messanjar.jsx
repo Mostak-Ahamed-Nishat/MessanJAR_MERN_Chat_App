@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaEllipsisH, FaRegEdit, FaSearch } from "react-icons/fa";
 import ActiveFriends from "./ActiveFriends";
 import Friends from "./Friends";
@@ -6,6 +6,7 @@ import RightSide from "./RightSide";
 
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../redux/actions/conversationListAction";
+
 import {
   getMessageAction,
   messageSendAction,
@@ -13,6 +14,18 @@ import {
 
 export default function Messanjar() {
   const dispatch = useDispatch();
+
+  //All messages
+  const [allMessages, setAllMessages] = useState([]);
+  //Auth user
+  const [authUserData, setAuthUserData] = useState({});
+  //Conversation list
+  const [conversations, setConversations] = useState([]);
+  //Current chat open
+  const [currentFriend, setCurrentFriend] = useState("");
+
+  //For scroll down
+  const scrollRef = useRef();
 
   //Conversations list
   let { isSuccess, data } = useSelector((state) => state.conversations);
@@ -22,16 +35,20 @@ export default function Messanjar() {
     (state) => state.auth
   );
 
-  //Auth user
-  const [authUserData, setAuthUserData] = useState({});
-  //Conversation list
-  const [conversations, setConversations] = useState([]);
-  //Current chat open
-  const [currentFriend, setCurrentFriend] = useState("");
+  const {
+    isSuccess: isGetMsgSuccess,
+    isError: isGetMsgError,
+    messages: getAllMsg,
+  } = useSelector((state) => state.messages);
+
+  const { isSuccess: isNewMessage, messages: newMessages } = useSelector(
+    (state) => state.sendMessage
+  );
+
+  //New message in the conversation list
 
   //Get the message from text box
   const [message, setMessage] = useState("");
-
 
   //Chat inbox handler
   const textHandler = (e) => {
@@ -58,7 +75,18 @@ export default function Messanjar() {
     setAuthUserData({ ...authData });
   }, [authSuccess, authData]);
 
-  //Get user conversation
+  //Sending messages
+  useEffect(() => {
+    if (isGetMsgSuccess && !isGetMsgError && getAllMsg) {
+      setAllMessages((prevMessages) => [...prevMessages, ...getAllMsg]);
+    }
+
+    if (newMessages && isNewMessage) {
+      setAllMessages((prevMessages) => [...prevMessages, ...newMessages]);
+    }
+  }, [getAllMsg, isGetMsgError, isGetMsgSuccess, isNewMessage, newMessages]);
+
+  //Get user conversation friend list
   useEffect(() => {
     dispatch(getAllFriends());
     if (data.length > 0 && isSuccess) {
@@ -73,10 +101,15 @@ export default function Messanjar() {
     }
   }, [conversations]);
 
+  //Send the chat conversation id with whom friends are talking with
   useEffect(() => {
     dispatch(getMessageAction(currentFriend._id));
-    
   }, [currentFriend?._id, dispatch, currentFriend]);
+
+  //scroll effect
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [allMessages]);
 
   return (
     <div className="messenger">
@@ -163,6 +196,8 @@ export default function Messanjar() {
             message={message}
             textHandler={textHandler}
             messageSendHandler={messageSendHandler}
+            allMessages={allMessages}
+            scrollRef={scrollRef}
           />
         ) : (
           <h1>Messanjar</h1>

@@ -10,19 +10,9 @@ export default function Media({
   textHandler,
   message,
   messageSendHandler,
+  allMessages,
+  scrollRef,
 }) {
-  const [allMessages, setAllMessages] = useState([]);
-  const { isLoading, isSuccess, isError, error, messages } = useSelector(
-    (state) => state.messages
-  );
-
-  useEffect(() => {
-    if (isSuccess && !isError) {
-      setAllMessages([...messages]);
-    }
-  }, [isError, isSuccess, messages]);
-
-
   return (
     <div className="col-9">
       <div className="right-side">
@@ -62,7 +52,7 @@ export default function Media({
 
               {/* Message Conversations  */}
 
-              <Messages messages={allMessages} />
+              <Messages messages={allMessages} scrollRef={scrollRef} />
 
               <MessageInbox
                 textHandler={textHandler}
