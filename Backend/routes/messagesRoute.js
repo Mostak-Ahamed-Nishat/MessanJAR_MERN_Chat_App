@@ -1,7 +1,7 @@
-
 const {
     getMessages,
-    sendMessage
+    sendMessage,
+    sendImageMessage
 } = require('../controller/messagesController')
 const {
     authTokenMiddleware
@@ -10,7 +10,11 @@ const {
 
 const router = require('express').Router()
 
-router.post('/messages', authTokenMiddleware, sendMessage)
-router.get('/messages/chat/:id', authTokenMiddleware, getMessages)
+router.post('/', authTokenMiddleware, sendMessage)
+router.get('/chat/:id', authTokenMiddleware, getMessages)
+router.post('/image', authTokenMiddleware, sendImageMessage)
+// router.post('/image', async (req, res) => {
+//     console.log("Hello");
+// })
 
 module.exports = router

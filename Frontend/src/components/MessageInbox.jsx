@@ -10,6 +10,7 @@ export default function MessageInbox({
   message,
   messageSendHandler,
   emojiHandler,
+  imageHandler,
 }) {
   const emojis = [
     "😀",
@@ -45,6 +46,12 @@ export default function MessageInbox({
 
       <div className="file hover-image">
         <div className="add-image">Add Image</div>
+        <input
+          type="file"
+          id="pic"
+          className="form-control"
+          onChange={(e) => imageHandler(e)}
+        />
         <label htmlFor="pic">
           <FaFileImage />
         </label>

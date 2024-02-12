@@ -3,7 +3,9 @@ import {
     MESSAGES_GET_FAIL,
     MESSAGES_GET_SUCCESS,
     MESSAGE_SENT_FAIL,
-    MESSAGE_SENT_SUCCESS
+    MESSAGE_SENT_SUCCESS,
+    MESSAGES_IMAGE_SEND_SUCCESS,
+    MESSAGES_IMAGE_SEND_FAIL
 } from '../actionTypes/actionTypes';
 
 
@@ -17,12 +19,12 @@ export const messageSendAction = (data) => async (dispatch) => {
             payload: res.data && res.data.data
         })
 
-        
+
 
     } catch (error) {
         dispatch({
             type: MESSAGE_SENT_FAIL,
-            payload: error?.response?.data?.error
+            payload: error.response.data.error
         })
     }
 }
@@ -42,5 +44,31 @@ export const getMessageAction = (current_Open_Chat_Id_With_Friend) => async (dis
             type: MESSAGES_GET_FAIL,
             payload: error.data
         })
+    }
+}
+
+
+//Send the image to the user
+export const imageMessageSendAction = (formData) => async (dispatch) => {
+    try {
+        console.log("Image sent successfully Start");
+        const res = await axiosInstance.post('/messages/image', formData)
+        dispatch({
+            type: MESSAGES_IMAGE_SEND_SUCCESS,
+            payload: res.data.data
+        })
+
+        console.log("Image sent successfully");
+        console.log(res.data.data);
+
+    } catch (error) {
+
+        console.log("Error happened");
+        console.log(error.response.data.error);
+
+        // dispatch({
+        //     type: MESSAGES_IMAGE_SEND_FAIL,
+        //     payload: error.response
+        // })
     }
 }

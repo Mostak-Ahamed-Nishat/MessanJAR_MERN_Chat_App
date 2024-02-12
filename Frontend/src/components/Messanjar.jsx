@@ -3,14 +3,15 @@ import { FaEllipsisH, FaRegEdit, FaSearch } from "react-icons/fa";
 import ActiveFriends from "./ActiveFriends";
 import Friends from "./Friends";
 import RightSide from "./RightSide";
-
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../redux/actions/conversationListAction";
 
 import {
   getMessageAction,
+  imageMessageSendAction,
   messageSendAction,
 } from "../redux/actions/messageAction";
+import { generateImageName } from "../../lib/generateImageName";
 
 export default function Messanjar() {
   const dispatch = useDispatch();
@@ -110,10 +111,25 @@ export default function Messanjar() {
     setMessage("");
   };
 
-  //Emoji Handler
-
+  //Send Emoji Handler
   const emojiHandler = (e) => {
     setMessage((previousMsg) => previousMsg + e);
+  };
+
+  //Send Image Handler
+  const imageHandler = (e) => {
+    console.log(e.target.files[0]);
+    if (e.target.files[0].length !== 0) {
+      const imageName = generateImageName(e.target.files[0]);
+
+      const formData = new FormData();
+      formData.append("senderName", authUserData.userName);
+      formData.append("receiverId", currentFriend._id);
+      formData.append("imageName", imageName);
+      formData.append("image", e.target.files[0]);
+
+      dispatch(imageMessageSendAction(formData));
+    }
   };
 
   return (
@@ -204,6 +220,7 @@ export default function Messanjar() {
             allMessages={allMessages}
             scrollRef={scrollRef}
             emojiHandler={emojiHandler}
+            imageHandler={imageHandler}
           />
         ) : (
           <h1>Messanjar</h1>

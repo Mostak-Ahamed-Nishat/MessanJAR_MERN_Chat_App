@@ -13,6 +13,7 @@ export default function Media({
   allMessages,
   scrollRef,
   emojiHandler,
+  imageHandler,
 }) {
   return (
     <div className="col-9">
@@ -60,6 +61,7 @@ export default function Media({
                 message={message}
                 messageSendHandler={messageSendHandler}
                 emojiHandler={emojiHandler}
+                imageHandler={imageHandler}
               />
             </div>
           </div>
