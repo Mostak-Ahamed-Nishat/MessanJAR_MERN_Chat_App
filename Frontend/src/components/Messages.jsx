@@ -2,17 +2,15 @@ import { useSelector } from "react-redux";
 
 export default function Messages({ messages, scrollRef }) {
   const { data } = useSelector((state) => state.auth);
-
   const { _id: authUser } = data;
 
   return (
-    <div className="message-show">
+    <div ref={scrollRef} className="message-show">
       {/* My/Sender message */}
       {messages?.map((msg) => {
         if (authUser.toString() === msg.senderId.toString()) {
           return (
-            // eslint-disable-next-line react/jsx-key
-            <div ref={scrollRef} className="my-message" key={msg._id}>
+            <div className="my-message" key={msg._id}>
               <div className="message">
                 <div className="my-text">
                   <p className="message-text">{msg?.message.text}</p>
@@ -31,8 +29,7 @@ export default function Messages({ messages, scrollRef }) {
 
         if (authUser.toString() === msg.receiverId.toString()) {
           return (
-            // eslint-disable-next-line react/jsx-key
-            <div ref={scrollRef} className="fd-message" key={msg._id}>
+            <div className="fd-message" key={msg._id}>
               <div className="message">
                 <div className="user-image fd-image">
                   <img
@@ -48,6 +45,8 @@ export default function Messages({ messages, scrollRef }) {
             </div>
           );
         }
+
+        return null; // To handle the case where neither condition is met
       })}
     </div>
   );

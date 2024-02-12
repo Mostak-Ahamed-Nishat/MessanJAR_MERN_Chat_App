@@ -9,6 +9,7 @@ export default function MessageInbox({
   textHandler,
   message,
   messageSendHandler,
+  emojiHandler,
 }) {
   const emojis = [
     "😀",
@@ -79,7 +80,9 @@ export default function MessageInbox({
       <div className="emoji-section">
         <div className="emoji">
           {emojis.map((e) => (
-            <span key={e}>{e}</span>
+            <span key={e} onClick={() => emojiHandler(e)}>
+              {e}
+            </span>
           ))}
         </div>
       </div>

@@ -20,6 +20,7 @@ export const sendMessageReducer = (state = initialState, action) => {
     } = action
 
     switch (type) {
+
         case MESSAGE_SENT_FAIL:
             return state = {
                 ...state,
@@ -35,7 +36,7 @@ export const sendMessageReducer = (state = initialState, action) => {
                 isLoading: false,
                     isSuccess: true,
                     isError: false,
-                    messages: [...state.messages, payload],
+                    messages: [payload],
             }
 
             default:

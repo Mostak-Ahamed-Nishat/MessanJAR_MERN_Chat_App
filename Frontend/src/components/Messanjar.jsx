@@ -14,43 +14,84 @@ import {
 
 export default function Messanjar() {
   const dispatch = useDispatch();
-
-  //All messages
-  const [allMessages, setAllMessages] = useState([]);
   //Auth user
   const [authUserData, setAuthUserData] = useState({});
   //Conversation list
   const [conversations, setConversations] = useState([]);
+  //All messages
+  const [allMessages, setAllMessages] = useState([]);
   //Current chat open
-  const [currentFriend, setCurrentFriend] = useState("");
-
+  const [currentFriend, setCurrentFriend] = useState({});
+  //Get the message from text box
+  const [message, setMessage] = useState("");
   //For scroll down
   const scrollRef = useRef();
 
   //Conversations list
   let { isSuccess, data } = useSelector((state) => state.conversations);
+  //Get user conversation friend list
+  useEffect(() => {
+    dispatch(getAllFriends());
+  }, [dispatch]);
 
-  //Auth User
+  useEffect(() => {
+    if (data.length > 0 && isSuccess) {
+      setConversations([...data]);
+    }
+  }, [data, dispatch, isSuccess]);
+
+  //User Authentication
   let { isSuccess: authSuccess, data: authData } = useSelector(
     (state) => state.auth
   );
 
+  useEffect(() => {
+    setAuthUserData({ ...authData });
+  }, [authSuccess, authData]);
+
+  //Select the first conversation as an open chat box
+  useEffect(() => {
+    if (conversations.length > 0) {
+      setCurrentFriend(conversations[0]);
+    }
+  }, [conversations]);
+
+  //change the current chatting friend
+  useEffect(() => {
+    dispatch(getMessageAction(currentFriend._id));
+  }, [currentFriend?._id, dispatch, currentFriend]);
+
+  //Get all the message with selected friend chat message
   const {
     isSuccess: isGetMsgSuccess,
     isError: isGetMsgError,
     messages: getAllMsg,
   } = useSelector((state) => state.messages);
 
+  useEffect(() => {
+    if ((isGetMsgSuccess, !isGetMsgError)) setAllMessages(getAllMsg);
+  }, [getAllMsg, isGetMsgError, isGetMsgSuccess]);
+
+  useEffect(() => {
+    setAllMessages([...getAllMsg]);
+  }, [getAllMsg]);
+
+  //Update the ui after send the message
   const { isSuccess: isNewMessage, messages: newMessages } = useSelector(
     (state) => state.sendMessage
   );
 
-  //New message in the conversation list
+  useEffect(() => {
+    setAllMessages([...getAllMsg, ...newMessages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newMessages]);
 
-  //Get the message from text box
-  const [message, setMessage] = useState("");
+  //scroll effect
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [allMessages]);
 
-  //Chat inbox handler
+  //Chat inbox handler. get the inbox text and send it to the server
   const textHandler = (e) => {
     e.preventDefault();
     setMessage(e.target.value);
@@ -65,51 +106,15 @@ export default function Messanjar() {
       receiverId: currentFriend._id,
       message: message ? message : "",
     };
-
     dispatch(messageSendAction(data));
     setMessage("");
   };
 
-  //User Authentication
-  useEffect(() => {
-    setAuthUserData({ ...authData });
-  }, [authSuccess, authData]);
+  //Emoji Handler
 
-  //Sending messages
-  useEffect(() => {
-    if (isGetMsgSuccess && !isGetMsgError && getAllMsg) {
-      setAllMessages((prevMessages) => [...prevMessages, ...getAllMsg]);
-    }
-
-    if (newMessages && isNewMessage) {
-      setAllMessages((prevMessages) => [...prevMessages, ...newMessages]);
-    }
-  }, [getAllMsg, isGetMsgError, isGetMsgSuccess, isNewMessage, newMessages]);
-
-  //Get user conversation friend list
-  useEffect(() => {
-    dispatch(getAllFriends());
-    if (data.length > 0 && isSuccess) {
-      setConversations([...data]);
-    }
-  }, [dispatch, isSuccess]);
-
-  //Select the first conversation as chatbox data
-  useEffect(() => {
-    if (conversations.length > 0) {
-      setCurrentFriend(conversations[0]);
-    }
-  }, [conversations]);
-
-  //Send the chat conversation id with whom friends are talking with
-  useEffect(() => {
-    dispatch(getMessageAction(currentFriend._id));
-  }, [currentFriend?._id, dispatch, currentFriend]);
-
-  //scroll effect
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [allMessages]);
+  const emojiHandler = (e) => {
+    setMessage((previousMsg) => previousMsg + e);
+  };
 
   return (
     <div className="messenger">
@@ -198,6 +203,7 @@ export default function Messanjar() {
             messageSendHandler={messageSendHandler}
             allMessages={allMessages}
             scrollRef={scrollRef}
+            emojiHandler={emojiHandler}
           />
         ) : (
           <h1>Messanjar</h1>

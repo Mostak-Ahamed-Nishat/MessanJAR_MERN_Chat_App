@@ -20,7 +20,6 @@ export const getMessagesReducer = (state = initialState, action) => {
     switch (type) {
 
         case MESSAGES_GET_SUCCESS:
-
             return {
                 ...state,
                 isLoading: false,
