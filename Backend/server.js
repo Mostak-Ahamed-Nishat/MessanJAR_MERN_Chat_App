@@ -18,7 +18,7 @@ if (!process.env.jsonPrivateKey) {
 
 // Use cors for cross connection
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'ws://localhost:8000'],
     credentials: true,
 }));
 

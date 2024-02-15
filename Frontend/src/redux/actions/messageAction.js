@@ -65,10 +65,9 @@ export const imageMessageSendAction = (formData) => async (dispatch) => {
 
         console.log("Error happened");
         console.log(error.response.data.error);
-
-        // dispatch({
-        //     type: MESSAGES_IMAGE_SEND_FAIL,
-        //     payload: error.response
-        // })
+        dispatch({
+            type: MESSAGES_IMAGE_SEND_FAIL,
+            payload: error.response
+        })
     }
 }

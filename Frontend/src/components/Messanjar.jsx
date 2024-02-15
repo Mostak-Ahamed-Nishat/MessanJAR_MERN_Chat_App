@@ -5,6 +5,7 @@ import Friends from "./Friends";
 import RightSide from "./RightSide";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../redux/actions/conversationListAction";
+import { io } from "socket.io-client";
 
 import {
   getMessageAction,
@@ -25,11 +26,17 @@ export default function Messanjar() {
   const [currentFriend, setCurrentFriend] = useState({});
   //Get the message from text box
   const [message, setMessage] = useState("");
+  // Socket Active user
+  const [activeUser, setActiveUser] = useState("");
+
   //For scroll down
   const scrollRef = useRef();
+  //SOcket
+  const socket = useRef();
 
   //Conversations list
   let { isSuccess, data } = useSelector((state) => state.conversations);
+
   //Get user conversation friend list
   useEffect(() => {
     dispatch(getAllFriends());
@@ -46,6 +53,7 @@ export default function Messanjar() {
     (state) => state.auth
   );
 
+  //Set the authenticated user to the state
   useEffect(() => {
     setAuthUserData({ ...authData });
   }, [authSuccess, authData]);
@@ -116,6 +124,30 @@ export default function Messanjar() {
     setMessage((previousMsg) => previousMsg + e);
   };
 
+  //Socket io
+  useEffect(() => {
+    socket.current = io("ws://localhost:8000");
+
+    return () => {
+      if (socket.current) {
+        socket.current.disconnect();
+      }
+    };
+  }, []);
+
+  //set the authenticated user into socket
+  useEffect(() => {
+    socket.current.emit("addUser", authUserData._id, authUserData);
+  }, [authUserData]);
+
+  //get the Authenticated users from socket
+  useEffect(() => {
+    socket.current.on("getUser", (users) => {
+      const filterUser = users.filter((user) => user._id !== authUserData._id);
+      setActiveUser(filterUser);
+    });
+  }, [authUserData._id]);
+
   //Send Image Handler
   const imageHandler = (e) => {
     console.log(e.target.files[0]);
@@ -164,7 +196,6 @@ export default function Messanjar() {
                 </div>
               </div>
             </div>
-
             {/* Search Bar  */}
             <div className="friend-search">
               <div className="search">
@@ -179,9 +210,8 @@ export default function Messanjar() {
               </div>
             </div>
 
-            {/* Active friend list show  */}
             <div className="active-friends">
-              <ActiveFriends />
+              <ActiveFriends user={activeUser} />
             </div>
 
             {/*Chatting friends  */}
