@@ -130,6 +130,8 @@ export default function Messanjar() {
 
     return () => {
       if (socket.current) {
+        console.log("Component unmounted");
+        console.log("User disconnected");
         socket.current.disconnect();
       }
     };
@@ -211,7 +213,11 @@ export default function Messanjar() {
             </div>
 
             <div className="active-friends">
-              <ActiveFriends user={activeUser} />
+              <ActiveFriends
+                user={activeUser}
+                authUserData={authUserData}
+                setCurrentFriend={setCurrentFriend}
+              />
             </div>
 
             {/*Chatting friends  */}
@@ -251,6 +257,7 @@ export default function Messanjar() {
             scrollRef={scrollRef}
             emojiHandler={emojiHandler}
             imageHandler={imageHandler}
+            activeUser={activeUser}
           />
         ) : (
           <h1>Messanjar</h1>

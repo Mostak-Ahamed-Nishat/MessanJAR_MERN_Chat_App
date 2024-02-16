@@ -1,6 +1,6 @@
 import { FaCaretSquareDown, FaEdit, FaSistrix } from "react-icons/fa";
 
-export default function MessageInfo({ messageInfo }) {
+export default function MessageInfo({ messageInfo, activeUser }) {
   return (
     <div className="friend-info">
       <input type="checkbox" id="gallery" />
@@ -8,7 +8,11 @@ export default function MessageInfo({ messageInfo }) {
         <div className="image">
           <img src={`../../public/usersImg/${messageInfo.image}`} alt="" />
         </div>
-        <div className="active-user">Active</div>
+        {activeUser &&
+        activeUser.length > 0 &&
+        activeUser.some((user) => user.userId == messageInfo._id) ? (
+          <div className="active-user">Active</div>
+        ) : ""}
 
         <div className="name">
           <h4>{messageInfo.userName}</h4>

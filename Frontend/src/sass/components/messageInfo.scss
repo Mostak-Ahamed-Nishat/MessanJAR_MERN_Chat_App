@@ -19,8 +19,11 @@
             overflow: hidden;
 
             img {
-                width: 100%;
-                height: 100%;
+                height: 70px;
+                width: 70px;
+                border-radius: 50%;
+                object-fit: cover;
+                overflow: hidden;
             }
 
             margin-bottom: 5px;
@@ -28,6 +31,11 @@
 
         .active-user {
             color: rgb(27, 238, 27);
+            margin-bottom: 3px;
+        }
+
+        .inactive-user {
+            color: rgb(80, 80, 80);
             margin-bottom: 3px;
         }
 

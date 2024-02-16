@@ -14,6 +14,7 @@ export default function Media({
   scrollRef,
   emojiHandler,
   imageHandler,
+  activeUser,
 }) {
   return (
     <div className="col-9">
@@ -29,7 +30,9 @@ export default function Media({
                       src={`../../public/usersImg/${currentFriend.image}`}
                       alt=""
                     />
+                    <div className="active-icon"></div>
                   </div>
+
                   <div className="name">
                     <h3> {currentFriend.userName} </h3>
                   </div>
@@ -68,7 +71,7 @@ export default function Media({
 
           {/* Media page  */}
           <div className="col-4">
-            <MessageInfo messageInfo={currentFriend} />
+            <MessageInfo messageInfo={currentFriend} activeUser={activeUser} />
           </div>
         </div>
       </div>

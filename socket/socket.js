@@ -18,8 +18,13 @@ const addUser = (userId, socketId, userInfo) => {
     }
 }
 
+const removeActiveUser = (socketId) => {
+    users = users.filter(user => user.socketId !== socketId)
+    return users
+}
+
 io.on('connection', (socket) => {
-    console.log("New User connected to ");
+    console.log("New User connected");
     //Connect the socket
     socket.on("addUser", (userId, userInfo) => {
         //get the socketId from socket connection
@@ -29,4 +34,10 @@ io.on('connection', (socket) => {
         //Send the authenticated users to the client
         io.emit('getUser', users)
     });
+
+    //Remove the inactive user from the active user list
+    socket.on('disconnect', () => {
+        removeActiveUser(socket.id)
+        io.emit('getUser', users)
+    })
 });

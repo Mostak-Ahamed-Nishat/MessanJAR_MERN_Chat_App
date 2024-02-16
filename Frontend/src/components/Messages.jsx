@@ -21,6 +21,7 @@ export default function Messages({ messages, scrollRef }) {
                     alt=""
                   />
                 </div>
+                
               </div>
               <div className="time">2 Jan 2022</div>
             </div>
