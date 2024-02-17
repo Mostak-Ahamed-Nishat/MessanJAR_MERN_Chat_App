@@ -21,13 +21,15 @@ export default function Messanjar() {
   //Conversation list
   const [conversations, setConversations] = useState([]);
   //All messages
-  const [allMessages, setAllMessages] = useState([]);
+  const [allMessages, setAllPreviousMsg] = useState([]);
   //Current chat open
   const [currentFriend, setCurrentFriend] = useState({});
   //Get the message from text box
   const [message, setMessage] = useState("");
   // Socket Active user
   const [activeUser, setActiveUser] = useState("");
+  //Get the socket new message
+  const [socketMessage, setSocketMessage] = useState("");
 
   //For scroll down
   const scrollRef = useRef();
@@ -74,26 +76,26 @@ export default function Messanjar() {
   const {
     isSuccess: isGetMsgSuccess,
     isError: isGetMsgError,
-    messages: getAllMsg,
+    messages: getAllPreviousMsg,
   } = useSelector((state) => state.messages);
 
   useEffect(() => {
-    if ((isGetMsgSuccess, !isGetMsgError)) setAllMessages(getAllMsg);
-  }, [getAllMsg, isGetMsgError, isGetMsgSuccess]);
+    if ((isGetMsgSuccess, !isGetMsgError)) setAllPreviousMsg(getAllPreviousMsg);
+  }, [getAllPreviousMsg, isGetMsgError, isGetMsgSuccess]);
 
   useEffect(() => {
-    setAllMessages([...getAllMsg]);
-  }, [getAllMsg]);
+    setAllPreviousMsg([...getAllPreviousMsg]);
+  }, [getAllPreviousMsg]);
 
-  //Update the ui after send the message
+  //Hit the API after send the message from the active user inbox
   const { isSuccess: isNewMessage, messages: newMessages } = useSelector(
     (state) => state.sendMessage
   );
 
+  //Update the ui after send the message from the user
   useEffect(() => {
-    setAllMessages([...getAllMsg, ...newMessages]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newMessages]);
+    setAllPreviousMsg((prevMessage) => [...prevMessage, ...newMessages]);
+  }, [getAllPreviousMsg, newMessages]);
 
   //scroll effect
   useEffect(() => {
@@ -106,7 +108,7 @@ export default function Messanjar() {
     setMessage(e.target.value);
   };
 
-  //Sending message handler
+  //Sending message handler to the api
   const messageSendHandler = (e) => {
     e.preventDefault();
     const data = {
@@ -115,6 +117,19 @@ export default function Messanjar() {
       receiverId: currentFriend._id,
       message: message ? message : "",
     };
+
+    //hit the socket to send the real time message to the user
+    socket.current.emit("sendMessage", {
+      senderId: authUserData._id,
+      senderName: authUserData.userName,
+      receiverId: currentFriend._id,
+      message: {
+        text: message ? message : "",
+        image: "",
+      },
+      time: new Date(),
+    });
+
     dispatch(messageSendAction(data));
     setMessage("");
   };
@@ -126,18 +141,23 @@ export default function Messanjar() {
 
   //Socket io
   useEffect(() => {
+    //After load the page set the io into the ref hock
     socket.current = io("ws://localhost:8000");
+
+    // If the receiver is online send the message realtime
+    socket.current.on("getMessage", (data) => {
+      setSocketMessage(data);
+    });
 
     return () => {
       if (socket.current) {
-        console.log("Component unmounted");
-        console.log("User disconnected");
+        // Disconnect the socket
         socket.current.disconnect();
       }
     };
   }, []);
 
-  //set the authenticated user into socket
+  //set the authenticated user into socket active user list
   useEffect(() => {
     socket.current.emit("addUser", authUserData._id, authUserData);
   }, [authUserData]);
@@ -150,9 +170,25 @@ export default function Messanjar() {
     });
   }, [authUserData._id]);
 
+  //Add the socket message to the previous message *********
+  useEffect(() => {
+    if (socketMessage && currentFriend) {
+      if (
+        socketMessage.senderId == currentFriend._id &&
+        socketMessage.receiverId == authUserData._id
+      ) {
+        dispatch({
+          type: "SOCKET_REAL_TIME_MESSAGE",
+          payload: socketMessage,
+        });
+
+        setSocketMessage("");
+      }
+    }
+  }, [socketMessage]);
+
   //Send Image Handler
   const imageHandler = (e) => {
-    console.log(e.target.files[0]);
     if (e.target.files[0].length !== 0) {
       const imageName = generateImageName(e.target.files[0]);
 

@@ -17,6 +17,10 @@ export const getMessagesReducer = (state = initialState, action) => {
         payload
     } = action
 
+    console.log("Check all message formate payload");
+
+    console.log(payload);
+
     switch (type) {
 
         case MESSAGES_GET_SUCCESS:
@@ -24,7 +28,8 @@ export const getMessagesReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                     isSuccess: true,
-                    messages: [...payload]
+                    // messages: [ ...payload]
+                    messages: [...state.messages, ...payload]
             }
 
             case MESSAGES_GET_FAIL:

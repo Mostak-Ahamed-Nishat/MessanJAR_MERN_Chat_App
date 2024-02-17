@@ -1,6 +1,7 @@
 import {
     MESSAGE_SENT_SUCCESS,
-    MESSAGE_SENT_FAIL
+    MESSAGE_SENT_FAIL,
+    SOCKET_REAL_TIME_MESSAGE
 } from './../actionTypes/actionTypes';
 
 
@@ -39,8 +40,16 @@ export const sendMessageReducer = (state = initialState, action) => {
                     messages: [payload],
             }
 
-            default:
-                return state
+            case SOCKET_REAL_TIME_MESSAGE:
+                return {
+                    ...state,
+                    isLoading: false,
+                        isSuccess: true,
+                        isError: false,
+                        messages: [payload],
+                }
+                default:
+                    return state
     }
 
 
