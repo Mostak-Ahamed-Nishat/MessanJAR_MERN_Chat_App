@@ -6,6 +6,11 @@ import RightSide from "./RightSide";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../redux/actions/conversationListAction";
 import { io } from "socket.io-client";
+import toast, { Toaster } from "react-hot-toast";
+import useSound from "use-sound";
+
+import MsgSound from "./../../public/sounds/Message.mp3";
+import NotificationSound from "./../../public/sounds/Noti.mp3";
 
 import {
   getMessageAction,
@@ -30,6 +35,12 @@ export default function Messanjar() {
   const [activeUser, setActiveUser] = useState("");
   //Get the socket new message
   const [socketMessage, setSocketMessage] = useState("");
+  //Show typing message indicating
+  const [isTyping, setIsTyping] = useState("");
+  //Message sound
+  const [messageSoundPlay] = useSound(MsgSound);
+  //Notification sound
+  const [notificationSoundPlay] = useSound(NotificationSound);
 
   //For scroll down
   const scrollRef = useRef();
@@ -102,21 +113,59 @@ export default function Messanjar() {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [allMessages]);
 
-  //Chat inbox handler. get the inbox text and send it to the server
+  //Socket io
+  useEffect(() => {
+    //After load the page set the io into the ref hock
+    socket.current = io("ws://localhost:8000");
+
+    // If the receiver is online send the message realtime
+    socket.current.on("getMessage", (data) => {
+      setSocketMessage(data);
+    });
+
+    //Friend Typing message show
+    socket.current.on("showTypingMessage", (data) => {
+      setIsTyping(data);
+    });
+
+    return () => {
+      if (socket.current) {
+        // Disconnect the socket
+        socket.current.disconnect();
+      }
+    };
+  }, []);
+
+  //Chat inbox handler. get the inbox text and set it into useState****
   const textHandler = (e) => {
     e.preventDefault();
     setMessage(e.target.value);
+
+    if (message !== "") {
+      console.log("Current Message :");
+
+      console.log(message);
+      socket.current.emit("typingMessage", {
+        senderId: authUserData._id,
+        receiverId: currentFriend._id,
+        message: e.target.value,
+      });
+    }
   };
 
   //Sending message handler to the api
   const messageSendHandler = (e) => {
     e.preventDefault();
+    //Message sound
+    messageSoundPlay()
     const data = {
       senderId: authUserData._id,
       senderName: authUserData.userName,
       receiverId: currentFriend._id,
       message: message ? message : "",
     };
+
+   
 
     //hit the socket to send the real time message to the user
     socket.current.emit("sendMessage", {
@@ -138,24 +187,6 @@ export default function Messanjar() {
   const emojiHandler = (e) => {
     setMessage((previousMsg) => previousMsg + e);
   };
-
-  //Socket io
-  useEffect(() => {
-    //After load the page set the io into the ref hock
-    socket.current = io("ws://localhost:8000");
-
-    // If the receiver is online send the message realtime
-    socket.current.on("getMessage", (data) => {
-      setSocketMessage(data);
-    });
-
-    return () => {
-      if (socket.current) {
-        // Disconnect the socket
-        socket.current.disconnect();
-      }
-    };
-  }, []);
 
   //set the authenticated user into socket active user list
   useEffect(() => {
@@ -202,8 +233,26 @@ export default function Messanjar() {
     }
   };
 
+  useEffect(() => {
+    if (
+      socketMessage &&
+      socketMessage.senderId !== currentFriend._id &&
+      socketMessage.receiverId == authUserData._id
+    ) {
+      toast.success(`${socketMessage.senderName} send a new message`);
+      notificationSoundPlay();
+    }
+  }, [socketMessage]);
+
   return (
     <div className="messenger">
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        gutter={8}
+        toastOptions={{ duration: 5000 }}
+      />
+
       <div className="row">
         <div className="col-3">
           <div className="left-side">
@@ -262,16 +311,15 @@ export default function Messanjar() {
 
               {conversations.length > 0
                 ? conversations.map((conversation) => (
-                    // eslint-disable-next-line react/jsx-key
                     <div
+                      key={conversation._id} // Add a unique key here
                       className={
-                        currentFriend._id == conversation._id
+                        currentFriend._id === conversation._id
                           ? "hover-friend active"
                           : "hover-friend"
                       }
                       onClick={() => setCurrentFriend(conversation)}
                     >
-                      {/* hover-friend */}
                       <Friends data={conversation} />
                     </div>
                   ))
@@ -294,6 +342,7 @@ export default function Messanjar() {
             emojiHandler={emojiHandler}
             imageHandler={imageHandler}
             activeUser={activeUser}
+            isTyping={isTyping}
           />
         ) : (
           <h1>Messanjar</h1>

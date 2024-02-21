@@ -1,5 +1,4 @@
 import React from "react";
-
 export default function ActiveFriends({
   authUserData,
   user,
@@ -12,8 +11,8 @@ export default function ActiveFriends({
           ? user.map((u) => {
               if (u.userId && authUserData._id !== u.userInfo._id) {
                 return (
-                  // eslint-disable-next-line react/jsx-key
                   <div
+                    key={u.userInfo._id} // Add a unique key here
                     className="image"
                     onClick={() => setCurrentFriend(u.userInfo)}
                   >
@@ -25,6 +24,7 @@ export default function ActiveFriends({
                   </div>
                 );
               }
+              return null;
             })
           : ""}
       </div>

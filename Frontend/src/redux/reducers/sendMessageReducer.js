@@ -17,7 +17,7 @@ const initialState = {
 export const sendMessageReducer = (state = initialState, action) => {
     const {
         payload,
-        type
+        type    
     } = action
 
     switch (type) {

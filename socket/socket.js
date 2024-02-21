@@ -59,11 +59,10 @@ io.on('connection', (socket) => {
         let isActiveUser = checkFriend(receiverId)
 
         console.log("***Active user***");
-        const socketId = isActiveUser[0].socketId
-        console.log(socketId);
+        const socketId = isActiveUser[0]?.socketId
+
 
         if (isActiveUser && isActiveUser.length > 0) {
-            // console.log("Inactive user sending message");
             //Get the user socket_id and emit a function 
             socket.to(socketId).emit('getMessage', {
                 senderId: data.senderId,
@@ -78,6 +77,30 @@ io.on('connection', (socket) => {
         }
 
     })
+
+
+    //Message typing show
+
+    // socket.on('typingMessage', (data) => {
+    //     console.log('Typing message');
+    //     if (data.senderId && data.receiverId && data.message.length > 0) {
+
+    //         let receiverId = data.receiverId
+    //         let isActiveUser = checkFriend(receiverId)
+
+    //         const socketId = isActiveUser[0]?.socketId
+
+    //         if (isActiveUser && isActiveUser.length > 0) {
+    //             socket.to(socketId).emit('showTypingMessage', {
+    //                 senderId: data.senderId,
+    //                 receiverId: data.receiverId,
+    //                 message: data.message
+    //             })
+    //         }
+
+
+    //     }
+    // })
 
     //Remove the inactive user from the active user list
     socket.on('disconnect', () => {

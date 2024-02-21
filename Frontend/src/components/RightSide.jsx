@@ -6,15 +6,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 export default function Media({
+  // eslint-disable-next-line react/prop-types
   currentFriend,
+  // eslint-disable-next-line react/prop-types
   textHandler,
+  // eslint-disable-next-line react/prop-types
   message,
+  // eslint-disable-next-line react/prop-types
   messageSendHandler,
+  // eslint-disable-next-line react/prop-types
   allMessages,
+  // eslint-disable-next-line react/prop-types
   scrollRef,
+  // eslint-disable-next-line react/prop-types
   emojiHandler,
+  // eslint-disable-next-line react/prop-types
   imageHandler,
+  // eslint-disable-next-line react/prop-types
   activeUser,
+  // eslint-disable-next-line react/prop-types
+  isTyping,
 }) {
   return (
     <div className="col-9">
@@ -57,7 +68,12 @@ export default function Media({
 
               {/* Message Conversations  */}
 
-              <Messages messages={allMessages} scrollRef={scrollRef} />
+              <Messages
+                messages={allMessages}
+                scrollRef={scrollRef}
+                isTyping={isTyping}
+                currentFriend={currentFriend}
+              />
 
               <MessageInbox
                 textHandler={textHandler}

@@ -16,13 +16,9 @@ export const getMessagesReducer = (state = initialState, action) => {
         type,
         payload
     } = action
-
-    console.log("Check all message formate payload");
-
-    console.log(payload);
+    
 
     switch (type) {
-
         case MESSAGES_GET_SUCCESS:
             return {
                 ...state,
